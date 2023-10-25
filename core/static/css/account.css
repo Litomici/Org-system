@@ -128,22 +128,25 @@ main .schedual{
 }
 .activity-table {
     width: 100%;
-    border-collapse: collapse;
+     border-collapse: separate; /* Ensure cells have independent borders */
+    border-spacing: 1rem 0; 
     margin: 2% 0 2% 0;
+    column-gap: 1rem;
 }
 .activity-table th{
     border: none; 
     padding: 0% 0% 0% 0%;
     text-align: left;
+    column-gap: 1rem;
 }
  .activity-table td {
     border: none; 
-    padding: 1% 0% 1% 0%;
-    margin: 1% 1% 1% 1%;
+
     text-align: left;
 }
 .activity-table th {
     background-color: #f2f2f2;
+    
 }
 
 .activity-table tr:nth-child(even) {
