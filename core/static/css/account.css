@@ -30,6 +30,40 @@ main{
     width: 100%;
     height: auto;
 }
+
+main nav{
+    width: 20%;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #15293c;
+    font-size: larger;
+    color:  #f5f5f5;
+    
+}
+nav ul{
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+main nav ul li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 3rem;
+    width: 100%;
+}
+main nav ul li button{
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+}
 .content{
     display: flex;
     flex-direction: column;
@@ -128,62 +162,41 @@ main .schedual{
 }
 .activity-table {
     width: 100%;
-    border-collapse: collapse;
+     border-collapse: separate;
+    border-spacing: 1rem 0; 
     margin: 2% 0 2% 0;
+    column-gap: 1rem;
 }
 .activity-table th{
     border: none; 
     padding: 0% 0% 0% 0%;
     text-align: left;
+    column-gap: 1rem;
 }
  .activity-table td {
     border: none; 
-    padding: 1% 0% 1% 0%;
-    margin: 1% 1% 1% 1%;
+
     text-align: left;
 }
 .activity-table th {
     background-color: #f2f2f2;
+    
 }
 
-.activity-table tr:nth-child(even) {
+.activity-table tr:nth-child(even) { 
     background-color: #f2f2f2;
 }
 
 .activity-table tr:hover {
     background-color: #e0e0e0;
 }
-
-main nav{
-    width: 20%;
-    height: inherit;
+.board{
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    background: #15293c;
-    font-size: larger;
-    color:  #f5f5f5;
-    
-}
-nav ul{
-    list-style: none;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-main nav ul li{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 3rem;
     width: 100%;
 }
-main nav ul li button{
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: inherit;
-    font-family: inherit;
+.card{
+    height: 500px;
+    width: 350px;
+    background-color:black; 
+    color: green;
 }
