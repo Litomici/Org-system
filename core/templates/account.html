@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--{% load static %}-->
+{% load static %}
 <html>
     <head>
         <meta charset="utf-8">
@@ -7,20 +7,57 @@
         <title>Login page</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-       <link rel="stylesheet" href="../static/css/account.css">
+        <link rel="stylesheet" href="../static/css/account.css">
         <link rel="stylesheet" href="../static/css/general.css">
+        <link rel="stylesheet" href="../static/css/account-navbar.css">
         <!--<link rel="stylesheet" href="{% static 'css/general.css'%}">
+        <link rel="stylesheet" href="{% static 'css/general.css'%}">
         <link rel="stylesheet" href="{% static 'css/account.css'%}">-->
         
     </head>
-    <body>
-        <script>function swap2profile() {
-    var welcomeDiv = document.getElementById("Welcome");
-    var profileDiv = document.getElementById("Profile");
-    
-    welcomeDiv.style.display = "none";
-    profileDiv.style.display = "flex";
-}</script>
+    <body onload="welcome()">
+        
+        <script>
+            function welcome(){
+                var welcomeDiv = document.getElementById("Welcome");
+                var profileDiv = document.getElementById("Profile");
+                var schedualDiv = document.getElementById("Schedual");
+                var campDiv = document.getElementById("Camps");
+                profileDiv.style.display = "none";
+                schedualDiv.style.display = "none";
+                welcomeDiv.style.display = "flex";
+                campDiv.style.display = "none";
+                return;
+            }
+            function all2none(){
+                var welcomeDiv = document.getElementById("Welcome");
+                var profileDiv = document.getElementById("Profile");
+                var schedualDiv = document.getElementById("Schedual");
+                var campDiv = document.getElementById("Camps");
+                profileDiv.style.display = "none";
+                schedualDiv.style.display = "none";
+                welcomeDiv.style.display = "none";
+                campDiv.style.display = "none";
+            }
+            function swap2profile() {
+                var profileDiv = document.getElementById("Profile");
+                all2none();
+                profileDiv.style.display = "flex";
+            }
+            function swap2schedual() {
+                var schedualDiv = document.getElementById("Schedual");
+                all2none();
+                schedualDiv.style.display = "flex";
+            }
+            function swap2camps() {
+                var campDiv = document.getElementById("Camps");
+                all2none();
+                campDiv.style.display = "flex";
+            }
+            function swap2contact(){
+                all2none();
+            }
+        </script>
         <header>
             <img src="../static/img/whiteLogoNoBG.png">
             <div class="headline"><h1>Litomcamp</h1>
@@ -29,10 +66,10 @@
         <main>
             <nav>
                 <ul>
-                    <li id="profile_button"><button onclick="swap2profile()">Profil</button></li>
-                    <li><a href="account">Rozvrh</a></li>
-                    <li>kontakt</li>
-                    <li>Tábory</li> 
+                    <li id="nav-profile" onclick="swap2profile()">Profil</li>
+                    <li id="nav-schedual" onclick="swap2schedual()">Rozvrh</li>
+                    <li><button onclick="swap2contact()">Kontakty</button></li>
+                    <li id="nav-camps" onclick="swap2camps()">Tábory</li> 
                     {% if role >= 1 %}
                     <!-- for leader-->
                     <li>správa akcí</li>
@@ -93,52 +130,107 @@
                 <div class="schedual" id="Schedual">
                     <h2>Časový plán vašich aktivit </h2>
                     <div class="timetable">
-                        <h2>Přihlášené aktivity:</h2>
+                        <h2>Přihlášené aktiv,ity:</h2>
                         <div class="cal">  
                             <section class="table__header">
-            <h1>Seznam všech akcí</h1>
-            <table class="activity-table">
-                <thead>
-                    <tr>
-                        <th> Aktivita </th>
-                        <th> Místo Srazu </th>
-                        <th> Datum </th>
-                        <th> Přihlášení </th>
-                        <th> Další info </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td> Bitva o Helfenburk</td>
-                        <td> Horní nádraží Litoměřice </td>
-                        <td class="date"> 14.&nbspříjna&nbsp2023&nbspod&nbsp10:00 </td>
-                        <td>
-                            Přihlášen
-                        </td>
-                        <td> S sebou: pohorky, teplé oblečení, svačinu na celý den, pití, pláštěnku. 45 Kč na  vlak a dobrou náladu</td>
-                    </tr>
-                    <tr>
-                        <td>Výlet na Radobýl</td>
-                        <td> Klubovna Litomíci </td>
-                        <td class="date"> 20.&nbspříjna&nbsp2023&nbspod&nbsp9:15 </td>
-                        <td>
-                            nepřihlášen
-                        </td>
-                        <td> S sebou: pohorky, teplé oblečení, svačinu na celý den, pití, pláštěnku a dobrou náladu</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+                                <h1>Seznam všech akcí</h1>
+                                <table class="activity-table">
+                                    <thead>
+                                        <tr>
+                                            <th> Aktivita </th>
+                                            <th> Místo Srazu </th>
+                                            <th> Datum </th>
+                                            <th> Přihlášení </th>
+                                            <th> Další info </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td> Bitva o Helfenburk</td>
+                                            <td> Horní nádraží Litoměřice </td>
+                                            <td class="date"> 14.&nbspříjna&nbsp2023&nbspod&nbsp10:00 </td>
+                                            <td>Přihlášen</td>
+                                            <td> S sebou: pohorky, teplé oblečení, svačinu na celý den, pití, pláštěnku. 45 Kč na  vlak a dobrou náladu</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Výlet na Radobýl</td>
+                                            <td> Klubovna Litomíci </td>
+                                            <td class="date"> 20.&nbspříjna&nbsp2023&nbspod&nbsp9:15 </td>
+                                            <td>nepřihlášen</td>
+                                            <td> S sebou: pohorky, teplé oblečení, svačinu na celý den, pití, pláštěnku a dobrou náladu</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Oddílovka</td>
+                                            <td> Klubovna Litomíci </td>
+                                            <td class="date"> 27.&nbspříjna&nbsp2023&nbspod&nbsp9:15 </td>
+                                            <td>Nepřihlášen</td>
+                                            <td> S sebou: Uzlovačku, zápisník, kámoše na soutěž.Nezapomeňte že budeme nakonci probírat tábor, takže porsíme rodiče, aby na konci počítali s 5-10 min zpoždění.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="camps" id="Camps">
+                    <h1>Vyberty si z nabídky našich táborů</h1><br>
+                    <div class="board">
+                        <div class="card">
+                            <div class="inner-card">
+                                <div class="front autmn">
+                                    <h2>Podzimní tábor</h2>
+                                    <button>Mám Zájem</button>
+                                </div>
+                                <div class="back">
+                                    <h2>Janov nad Nisou</h2>
+                                    <p class="description">
+                                    Pětidenní tábor v malebné vesničce v horách. Ubytování v Asociační chalupě. Program zahrnuje výlety do okolí Bedřichova, týmové hry a odpočinek od školních povinností.
+                                    </p>
+                                    <div class="data-line">
+                                        <div class="data">
+                                            <h3>1500 Kč</h3><p>Cena</p></div>
+                                        <div class="data"><h3>10/28</h3><p>Místa</p></div>
+                                        <div class="data"><h3>Společná</h3><p>Doprava</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <button>Přihlásit se</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="inner-card">
+                                <div class="front spring">
+                                    <h2>Jarní tábor</h2>
+                                    <button>Mám Zájem</button>
+                                </div>
+                                <div class="back">
+                                    <h2>Výprava Sloup v Čechách</h2>
+                                    <p>
+                                    Pětidenní tábor do pískovcových skal. Ubytování v Asociační chalupě. Program zahrnuje výlety do okolí Sloupu, zimní radovánky a odpočinek od školních povinností.
+                                    </p>
+                                    <div class="data-line">
+                                        <div class="data">
+                                            <h3>1500 Kč</h3><p>Cena</p></div>
+                                        <div class="data"><h3>0/28</h3><p>Místa</p></div>
+                                        <div class="data"><h3>Vlastní</h3><p>Doprava</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button>Přihlásit se</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                                          
         </main>
         <footer>
             <div>
                 <h3>Turistický oddíl mládeže Čr LITOMÍCI č.oddílu: 21205</h3><br>
                 <p>
-                    Dukelské kasárny, Na Vinici<br>
+                    Dukelské kasárny budova č. 24, Na Vinici<br>
                     412 01 Litoměřice, Česká republika, EU<br>
                     <br>
                     tel. +420 702 210 101<br>
@@ -147,7 +239,5 @@
                 </p>
             </div>
         </footer>
-        
-        <script src="" async defer></script>
     </body>
 </html>

@@ -1,48 +1,61 @@
-header{
-    width: 100%;
-    max-height: 16vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    color: #f5f5f5;
-    background: #13243b;
-}
-header img{
-    width: auto ;
-    max-height:  15vh;
-    justify-self: left;
-}
 
-header .headline{
-    display: inline-flex;
-    justify-content: space-between;
-    justify-self: left;
-    width: 90%;
-    flex-wrap: wrap;
-}
-
-header .headline ul li:hover{
-    background: black;
-}
 main{
     height: auto;
     min-height: inherit;
     width: 100%;
     height: auto;
 }
+
+main nav{
+    width: 20%;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #15293c;
+    font-size: larger;
+    color:  #f5f5f5;
+    
+}
+nav ul{
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+main nav ul li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 3rem;
+    width: 100%;
+    cursor: pointer;
+}
+main nav ul li:hover{
+  background-color: rgba(19, 36, 59,0.7); 
+}
+main nav ul li button{
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+}
 .content{
     display: flex;
     flex-direction: column;
-    width: 75%
+    width: 80%
 }
 .welcome{
     width: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; 
     text-align: center;
     justify-content: center;
-    height: 80vh;
+    min-height: 80vh;
 }
 .profile{
     width: 100%;
@@ -90,79 +103,228 @@ main{
     justify-content:space-evenly;
     width: 100%;
 }
+.profile .R3 div{
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 .profile .R4{
     display: flex;
     justify-content: space-evenly;
     width: 100%;
 }
-.profile .change{
+.profile .changes{
     width: 100%;
-    min-height:5vh ;
+    min-height:15vh ;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 main .schedual{
-    display: flex;
+    display: none;
+    flex-direction: column;
     width: 100%;
 }
 .schedual .timetable{
     display: flex;
     flex-direction: column;
-    width: 50%;
-    background: rgb(100, 100, 99);
-}
-.schedual .timetable ul{
-    list-style: none;
     width: 100%;
+
+}
+.cal{
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: #13243b 5px solid;
-}
-.moreInfo{
-    display: none;
-}
-.schedual .timetable ul li{
-    list-style: none;
     width: 100%;
+}
+.activity-table {
+    width: 100%;
+     border-collapse: separate; /* Ensure cells have independent borders */
+    border-spacing: 1rem 0.5rem; 
+    margin: 2% 0 2% 0;
+    column-gap: 1rem;
+}
+.activity-table th{
+    border: none; 
+    padding: 0% 0% 0% 0%;
+    text-align: left;
+    column-gap: 1rem;
+    line-height: 2rem;
+    margin-top: 0.5rem
+}
+ .activity-table td {
+    border: none; 
+    text-align: left;
+}
+.activity-table th {
+    background-color: rgba(20, 51, 128,0.5);
+    border-radius: 60px;
+    text-align: center;
+
+}
+
+.activity-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.activity-table tr:hover {
+    background-color: #e0e0e0;
+}
+.camps {
     display: flex;
     flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
     justify-content: center;
     align-items: center;
-    border-bottom: #13243b 5px solid;
+    width: 100%;
+    min-height: 80vh;
 }
-main nav{
-    width: 20%;
-    height: inherit;
+.board{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+}
+.card{
+    height: clamp(15rem, 30rem, 45vh);
+    width: clamp(17rem, 19rem, 45%);
+    color: #f5f5f5;
+    perspective: 500px;
+}
+.inner-card{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 1.3s;
+    transform-style: preserve-3d;
+}
+.front, .back{
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    position: absolute;
+    backface-visibility: hidden;
+
+}
+.front{
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
+    align-content: center;
+    background-size: cover;
+    background-position: center;
+    flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
-    background: #15293c;
-    font-size: larger;
-    color:  #f5f5f5;
-    
 }
-nav ul{
-    list-style: none;
+.front h2{
+    text-align: center;
+    color: #f5f5f5;
+    letter-spacing: 0.3rem;
     width: 100%;
+    background-color: rgba(19, 36, 59,0.5);
+    line-height: clamp(2rem, 3rem, 15%);
+}
+.front button{
+    width: clamp(25%,10rem,50%);
+    height: clamp(2rem, 3.5%,4rem);
+    border-radius: 90px;
+    border: 2px solid rgba(19, 36, 59,1);
+    background: rgba(19, 36, 59,0.8);
+    color: #f5f5f5;
+    align-self: center;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+.back{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-content: center;
+    background-color: rgba(19, 36, 59,1);
+    color: #f5f5f5;
+    transform: rotateY(180deg);
+}
+.back h2{
+    border-bottom: 5px solid #365291;
+    width: 95%;
+    margin: 0 0 1rem 2.5%;
+}
+
+.back .description{
+    width: 90%;
+    margin: 0;
+    align-self: center;
+    text-align: left;
+}
+.back .data-line{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    line-height: 1rem;
+}
+.back .data-line .data{
+    flex: 1;
+    text-align: center;
+    font-size: medium;
+    position: relative;
     margin: 0;
     padding: 0;
 }
-main nav ul li{
+.back .data-line .data::after{
+    content: '';
+    width: 2px;
+    height: 1.5rem;
+    background: white;
+    position: absolute;
+    top: 1rem;
+    right: 0;
+}
+.back .data-line .data:last-child::after{
+display: none;
+    
+}
+.back .data-line h3{
+    font-size: large; 
+    font-weight: 400;
+    color: white;
+}
+.card:hover .inner-card{
+    transform: rotateY(180deg);
+}
+.row{
     display: flex;
     justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 3rem;
     width: 100%;
+    min-height: 14%;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
 }
-main nav ul li button{
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: inherit;
-    font-family: inherit;
+.row button{
+    width: clamp(25%,10rem,50%);
+    height: clamp(2rem, 3.5%,4rem);
+    cursor: pointer;
+    border-radius: 90px;
+    /* margin-top: 10%; */
+    border: 2px solid black;
+    background: rgb(1 17 39);
+    color: #f5f5f5;
 }
+.autmn{
+    background-image:url(http://www.litomici.euweb.cz/Pictures/autmn.jpg);
+}
+.spring{
+    background-image: url(http://www.litomici.euweb.cz/Pictures/spring.jpg);
+}
+/* .easter{
+    
+}
+.summer{
+    
+} */

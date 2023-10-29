@@ -84,13 +84,21 @@ header img{
     left: 13%;
     font-size: x-large;
 }
-.login p{
-align-self: center;
-justify-self: center;
+.login .log-questions p{
+    text-align: center;
 }
 .submit{
     width: 20%;
     height: 2rem;
     align-self: center;
-    
+}
+.log-questions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap-reverse;
+    width: 100%;
+    gap: 1rem;
+    line-height: 0.5rem;
+ 
 }
