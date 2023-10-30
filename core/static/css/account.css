@@ -321,6 +321,8 @@ display: none;
 }
 .spring{
     background-image: url(http://www.litomici.euweb.cz/Pictures/spring.jpg);
+    background-image: url("http://www.litomici.euweb.cz/Pictures/spring.jpg");
+    background-image: url('../static/img/whiteLogoNoBG.png');
 }
 /* .easter{
     
