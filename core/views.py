@@ -21,6 +21,11 @@ def userIn(request):
             "fname": request.user.first_name,
             "lname": request.user.last_name,
             "email": request.user.email,
+            "mobile": account.mobile,
+            "status":account.CZK,
+            "addr":account.addres,
+            "psc":account.psc,
+            "city":account.city,
             "lastlog":request.user.last_login,
             "kid1": account.kid1,
             "kid2": account.kid2,
@@ -56,6 +61,7 @@ def signUp(request):
         email = request.POST.get("mail")
         pass1 = request.POST.get("pass")
         pass2 = request.POST.get("pass")
+        mobile = request.POST.get("mobile")
         
         ## Podminky pro uspesne vytvoreni uctu
         if User.objects.filter(username=username):# ID User = email
@@ -73,6 +79,7 @@ def signUp(request):
         my_user.last_name=lname
         my_user.save()
         user_extension = Account(user=my_user)
+        user_extension.mobile(mobile)
         user_extension.save()
         messages.success(request,"Váš účet byl úspěšně založen")
         # ## Welcome Email

@@ -4,6 +4,10 @@ from datetime import datetime
 
 class Account(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
+    addres=models.CharField(default="")
+    mobile=models.CharField(max_length=13, default="")
+    city=models.CharField(default="")
+    psc=models.CharField(default="")
     CZK = models.FloatField(default=(0.0))
     kid1= models.CharField(default="")
     kid2= models.CharField(default="")
