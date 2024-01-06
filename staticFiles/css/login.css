@@ -1,4 +1,6 @@
 main{
+    display: flex;
+    width: 100%;
     flex-direction:column;
     justify-content: center;
     align-items: center;
@@ -48,40 +50,98 @@ header img{
 .login{
     position: relative;
     width: 70%;
-    min-height: 60vh;
+    min-height: 40vh;
     background: white;
     border-radius: 20px;
-    top:-5vh;
+    top: -5vh;
     display: flex;
-    padding-left: 2rem;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
 }
 .login form{
+    
     margin-top: 1rem;
     width: 80%;
     align-self: center;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: stretch;
+    flex-wrap: wrap;
 }
-.login form .data{
-    position: relative;
-    width: 74%;
-    left:13%;
-    height: 2rem;
+.login form h2{
+    letter-spacing: 0.2rem;
+    margin: 0.2rem 0.3rem 1rem 0.3rem;
+}
+.login form p{
+    min-width: 75%;
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
-.login h1{
-    font-size: xxx-large;
+.login form p label{
+    min-width: 100%;
+}
+.login form p input{
+    min-width: 100%;
+    }
+.login .resetPasswd{
     margin: 0;
     padding: 0;
 }
-.login label{
+.login p .helptext{
+    display: none;
+}
+.login .resetPasswd label{
+    font-size: x-large;
+    letter-spacing: 0.2rem;
+    margin: 0;
+    padding: 0;
+}
+.login h1{
+    letter-spacing: 0.1rem;
+    font-size: xxx-large;
+    padding: 0;
+}
+.login .resetPasswd input{
+    border: 2px solid #13243b;
+    border-radius: 10px;
+    margin: 0.5rem 0 0 0;
+    min-height: 2rem;
+    min-width: 15rem;
+    font-size: medium;
+}
+.login .resetPasswd button{
+    margin: 2rem 0 1rem 0;
+    width: 10rem;
+    min-height: 2.5rem;
+    color: #e8e8e8;
+    font-size: large;
+    background-color: #13243b;
+    display: block;
+    text-align: center;
+    border-radius: 15px;
+}
+.login .logging{
+    color: black;
+    /* white-space: pre; */
+}
+.login .logging .data{
+    border: gray 1px solid;
     position: relative;
-    left: 13%;
+    width: 74%;
+    height: 2rem;
+}
+.login .logging label{
+    width: 74%;
+    position: relative;
     font-size: x-large;
 }
 .login .log-questions p{
@@ -99,6 +159,4 @@ header img{
     flex-wrap: wrap-reverse;
     width: 100%;
     gap: 1rem;
-    line-height: 0.5rem;
- 
 }
