@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'Litomici_memeber_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),#BASE_DIR / 'db.sqlite3',
     }
 }
 DATABASES['default']=dj_database_url.parse('postgres://litomici_login_system_database_user:Vb5Ax8SDdEGTus68EkDq8RfDQaW8FR28@dpg-cld8bd7gsrdc73fja67g-a.frankfurt-postgres.render.com/litomici_login_system_database')
@@ -137,7 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/' 
-STATIC_ROOT = BASE_DIR / 'staticFiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticFiles')#BASE_DIR / 'staticFiles'
 LOGOUT_REDIRECT_URL = "login"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
