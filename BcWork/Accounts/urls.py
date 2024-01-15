@@ -3,7 +3,7 @@ from . import views
 from django.contrib.auth.views import LogoutView,PasswordResetDoneView,PasswordResetView,PasswordResetCompleteView,PasswordResetConfirmView
 from Litomici_memeber_system import settings as STS
 
-
+app_name = 'account'
 urlpatterns = [
     #sending an email
     path("sendMsg",views.sendMessage,name="sendMSG"),#simple message from user

@@ -130,6 +130,20 @@ main{
 }
 .signing-form{
     list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.signing-form .frame{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    border-radius: 5px;
+    border: #15293c 2px solid;
 }
 .signing-form .container {
     display: block;
@@ -154,11 +168,11 @@ main{
   /* Create a custom checkbox */
 .signing-form .checkmark {
     position: absolute;
-    top: 0;
-    left: 0;
     height: 25px;
     width: 25px;
     background-color: #eee;
+    top: 20%;
+    left: 2%;
   }
   
   /* On mouse-over, add a grey background color */
@@ -371,4 +385,35 @@ display: none;
     margin: 0;
     padding: 0;
 }
-
+/* nástroj pro správu eventů */
+.actionBar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.actionBar a{
+    margin: 1rem 0rem 1rem 0rem;
+}
+.split-screen{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; 
+}
+.split1{
+    width: 48%;
+}
+.split2{
+    width: 51%;
+    min-height: 65vh;
+    max-height:70vh;
+    overflow: scroll;
+}
+.invis{
+    display: none;
+}

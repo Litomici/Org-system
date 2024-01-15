@@ -7,7 +7,7 @@
     
     <div class="login">
         <h1>Zaregistruj se</h1>
-    <form action="/newAccount" method="post" class="logging">
+    <form action="{% url "account:newAccount"%} method="post" class="logging">
         <h2>Krok 2.</a>
         {% csrf_token %}
         {{form.as_p}}

@@ -3,7 +3,8 @@
     <div class="content">
     {% block Content %}
     <h2>Odeber členy tohoto účtu</h2>
-  <form method="post" action='/removeMember'>
+    
+  <form method="post" action="{% url "account:removeMember" %}">
     {% csrf_token %}
     <label for="member_id">Zvolte člena:</label><br>
     <select name="member_id" id="member_id">

@@ -24,7 +24,7 @@
     </head>
     <body>
         <header>
-            <img src="{% static 'img/whiteLogoNoBG.png' alt="logo v bílé barvě"%}">
+            <a href="{% url "account:logged" %}"><img src="{% static 'img/whiteLogoNoBG.png' alt="logo v bílé barvě"%}"></a>
             <div class="headline"><h1>Litomcamp</h1>
                 </div>
         </header>
@@ -43,7 +43,7 @@
                 <tr>
                     <td class="main-coll-Lout">
                         <div class="logout">
-                            <a href="/logout"><button type="button" class="btn btn-light">Odhlásit se</button></a>
+                            <a href="{% url "account:logout" %}"><button type="button" class="btn btn-light">Odhlásit se</button></a>
                         <div>
                     </td>
                 </tr>

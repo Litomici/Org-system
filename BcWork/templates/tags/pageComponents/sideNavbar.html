@@ -1,11 +1,11 @@
 <ul>
-    <a href="/profileInfo"><li id="nav-profile" >Profil</li></a>
-    <a href="/event/listAll"><li id="nav-profile" >Rozvrh akcí</li></a>
-    <a href="/sendMsg"><li id="nav-profile" >Kontaktuj nás</li></a>
-    <a href="/event/listCamps"><li id="nav-camps" >Tábory</li></a>
+    <a href="{% url "account:profile" %}"><li id="nav-profile" >Profil</li></a>
+    <a href="{% url "event:listAll" %}"><li id="nav-profile" >Rozvrh akcí</li></a>
+    <a href="{% url "account:sendMSG" %}"><li id="nav-profile" >Kontaktuj nás</li></a>
+    <a href="{% url "event:listCamps" %}"><li id="nav-camps" >Tábory</li></a>
     {% if role >= 1 %}
     <!-- for leader-->
-        <a href="event/eventTool"><li>správa akcí</li></a>
+        <a href="{% url "event:tool"%}"><li>správa akcí</li></a>
     {% endif %}
     {% if role >= 2 %}
     <!-- for econom -->

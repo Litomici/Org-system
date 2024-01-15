@@ -9,16 +9,13 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
 import json
 import dj_database_url
 from pathlib import Path
 from django.core.mail.backends.console import EmailBackend
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -27,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-wx6^cl3o#*h(cv7ax2f$rt53fasb=jq#6tk@7!5%_pom!&poft'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800
 ALLOWED_HOSTS = ['*']
@@ -73,7 +70,7 @@ ROOT_URLCONF = 'Litomici_memeber_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS':[os.path.join(BASE_DIR, 'templates')],# [BASE_DIR/"templates"],
+        'DIRS': [BASE_DIR/"templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,7 +93,7 @@ WSGI_APPLICATION = 'Litomici_memeber_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),#BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 DATABASES['default']=dj_database_url.parse('postgres://litomici_login_system_database_user:Vb5Ax8SDdEGTus68EkDq8RfDQaW8FR28@dpg-cld8bd7gsrdc73fja67g-a.frankfurt-postgres.render.com/litomici_login_system_database')
@@ -137,7 +134,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/' 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticFiles')#BASE_DIR / 'staticFiles'
+STATIC_ROOT = BASE_DIR / 'staticFiles'
 LOGOUT_REDIRECT_URL = "login"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

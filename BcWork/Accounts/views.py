@@ -60,7 +60,7 @@ def sendMessage(request):
         return render(request, 'tags/mains/contacts.html', {'form': form,"done":3,'role':account.position,})
     else:
         messages.error(request,"Platnost přihlášení vypršela")
-        return redirect("login")
+        return redirect("account:login")
 #member operations
 def removeMember(request):
     if isUserLogged(request):
@@ -74,7 +74,7 @@ def removeMember(request):
                 if selected_member.ATOM_id == (request.POST.get("Atom")):
                     account.member.remove(selected_member)
                     account.save()
-                    return redirect('profile')  # Redirect to the member list view or another appropriate view
+                    return redirect('account:profile')  # Redirect to the member list view or another appropriate view
                 else:
                     messages.error(request,"Nesprávný osobní kód")
                     context = {
@@ -88,7 +88,7 @@ def removeMember(request):
         }
         return render(request, 'tags/mains/removeMember.html', context)
     else:
-        return redirect(login)
+        return redirect('account:login')
 def add_member_to_account(request):
     if isUserLogged(request):
  # Get the currently logged-in account
@@ -106,14 +106,14 @@ def add_member_to_account(request):
                 selected_member = member.objects.get(pk=selected_member_id)
                 account.member.add(selected_member)
                 account.save()
-                return redirect('profile')  # Redirect to the member list view or another appropriate view
+                return redirect('account:profile')  # Redirect to the member list view or another appropriate view
     
         context = {
             'available_members': aviable_members,
             'role':account.position,
         }
         return render(request, 'test.html', context)
-    else: return redirect(login)
+    else: return redirect('account:login')
 def newMember(request):
     if isUserLogged:
         if request.method == 'POST':
@@ -126,7 +126,7 @@ def newMember(request):
                     account = getUsersAccount(request)
                     account.wallet+=(-1200)
                 messages.success(request, 'Člen byl úspěšny vytvořen a přidán k vašemu účtu')
-                return redirect('profile')  # Replace 'success_page' with the desired success page name or URL
+                return redirect('account:profile')  # Replace 'success_page' with the desired success page name or URL
             else:
                 messages.error(request, 'Člena se nepodařilo vytvořit.\n'+form.errors.as_text())
                 form = NewMemeberForm()
@@ -135,7 +135,7 @@ def newMember(request):
             form = NewMemeberForm()
         return render(request, 'tags/mains/newMember.html', {'form': form,"role":request.user.account.position})
     else:
-        return redirect("login")    
+        return redirect("account:login")    
 #Creating account
 def signUp(request):#prvni krok registrace
     if request.method == "POST":
@@ -150,7 +150,7 @@ def signUp(request):#prvni krok registrace
                 login(request, user)
                 # Redirect to the next step of registration (adjust the URL accordingly)
                 messages.success(request,"První krok Registrace byl úspěšný")
-                return redirect('newAccount')  # Change 'next_step_registration' to your actual URL
+                return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
         else:
             messages.error(request,"email není platný nebo se zadaná hesla neshodují")
             form=UserRegistrationForm()
@@ -169,7 +169,7 @@ def NewAccount(request):#druhý krok registrace
         return HttpResponseRedirect("logged")
     if not request.user.is_authenticated:
         messages.success(request,"Přihlášení vypršelo. Přihlas se znovu.")
-        return redirect("login")
+        return redirect("account:login")
     if request.method == "POST":
         form = NewAccountForm(request.POST)
         if form.is_valid():
@@ -218,7 +218,7 @@ def addUserToAccount(request):
             return render(request, 'tags/mains/userInvite.html', {'form': form,'role':account.position,})
     else:
         messages.error(request,"Platnost přihlášení vypršela")
-        return redirect(login)
+        return ('account:login')
 def invitedUser(request, token):
     email_confirmation = get_object_or_404(EmailConfirmation, token=token)
     sender=token.split("=>")[0]
@@ -243,7 +243,7 @@ def invitedUser(request, token):
                 account.users.add(usr)
                 messages.success(request, 'Účet byl úspěšně vytvořen. Nyní se prosím přihlaš.')
                 email_confirmation.delete()  # Remove the email confirmation record
-                return redirect('login')  # Redirect to login page or wherever you want
+                return redirect('account:login')  # Redirect to login page or wherever you want
     else:
         form = SetPasswordForm()
 
@@ -262,17 +262,17 @@ def userIn(request):
     return render(request,"index.html")
 def signIn(request):
     if isUserLogged(request):
-        return redirect("logged")
+        return redirect("account:logged")
     if request.method=="POST":
         uname = request.POST.get("mail")
         passwd = request.POST.get("pass")
         user = authenticate(username=uname,password=passwd)
         if user is not None:
             login(request,user)
-            return redirect("logged")
+            return redirect("account:logged")
         else:
             messages.error(request,"Špatná emailová adresa nebo heslo")
-            return redirect("login")
+            return redirect("account:login")
     return render(request, "index.html")
 def sign_out(request):
     logout(request)
@@ -314,7 +314,7 @@ def userData(request):
             dic["members"]=members
         return render(request,"tags/mains/profile.html",dic)
     messages.success(request,"Přihlášení vypršelo. Přihlas se znovu.")
-    return redirect("login")
+    return redirect("account:login")
 def nothingToShow(request):
     return render(request,"blindPath.html")
 # def tester(request):

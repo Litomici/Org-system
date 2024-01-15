@@ -12,7 +12,7 @@ class Event(models.Model):
         ('akce_pro_verejnost', 'Akce pro veřejnost'),
         ('jine', 'Jiné'),
     ]
-    
+    organizedBy=models.CharField(default="turistaklitomici@gmail.cz")
     event_type = models.CharField(max_length=50, choices=EVENT_TYPES, default='vylet')#druh akce
     name=models.CharField(max_length=80)#jméno události
     destination=models.CharField(max_length=50)#cílová destinace

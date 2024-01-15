@@ -5,24 +5,67 @@ from .models import Event
 class EventCreationForm(ModelForm):
     class Meta:
         model = Event
-        fields = ['event_type','name', 'destination', 'meeting', 'ending', 'departure', 'arrival', 'notes']
+        fields = ['organizedBy','event_type','name', 'destination', 'meeting', 'ending', 'departure', 'arrival', 'notes','capacity','travel','price','description']
         labels={
-            "event_type":('Druh akce'),
-            "name": ('Název akce'),
-            "destination": ('Místo konání'),
+            "event_type":('Typ akce'),
+            "name": ('Název Události'),
+            "destination": ('Cíl cesty/Místo konání'),
             "meeting": ('Datum a čas srazu'),
             "ending": ('Datum a čas příjezdu'),
             "departure": ('Místo srazu'),
-            "arrival": ('Místo vyzvednutí rodiči'),
-            "notes": ('Co s sebou a další poznámky'),
+            "arrival": ('Místo ukončení'),
+            "notes": ('Co s sebou?'),
+            "capacity": ("Maximální počet účastníků"),
+            "price":("Celková cena/Vstupné"),
+            "description":("Detailnější popis akce a její průběh"),
+            "travel":("Vlastní doprava")
         }
         widgets={
-            'event_type': forms.Select(choices=Event.EVENT_TYPES),
+            'event_type': forms.Select(attrs={'class':'form-control'}, choices=Event.EVENT_TYPES),
             "name": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
-            "destination": forms.TextInput(attrs={'class':'col-sm-4 col-form-label'}),
-            "meeting": DateTimeInput(attrs={'type': 'datetime-local', 'format': '%Y-%m-%dT%H:%M'}),
-            'ending': DateTimeInput(attrs={'type': 'datetime-local', 'format': '%Y-%m-%dT%H:%M'}),
-            "departure": forms.TextInput(attrs={'class':'col-sm-4 col-form-label'}),
-            "arrival": forms.TextInput(attrs= {'class': 'col-sm-4 col-form-label'}),
-            "notes": forms.TextInput(attrs={'class':'form-control'}),
+            "destination": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
+            "meeting": DateTimeInput(attrs={'class':'form-control','type': 'datetime-local', 'format': '%Y-%m-%dT%H:%M'}),
+            'ending': DateTimeInput(attrs={'class':'form-control','type': 'datetime-local', 'format': '%Y-%m-%dT%H:%M'}),
+            "departure": forms.TextInput(attrs={'class':'form-control'}),
+            "arrival": forms.TextInput(attrs= {'class':'form-control'}),
+            "notes": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
+            "capacity": forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
+            "price": forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max':100000}),
+            "description": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
+            "travel":forms.CheckboxInput(attrs={'class':'form-check-input','id':'checkbox'}),
+        }
+
+class EventEditForm(ModelForm):
+    eventId = forms.CharField(widget=forms.TextInput(attrs={'id': 'eventId', "class":"invis"}))
+    class Meta:
+        model = Event
+        fields = ('organizedBy','eventId','event_type','name', 'destination', 'meeting', 'ending', 'departure', 'arrival', 'notes','capacity','travel','price','description')
+        labels={
+            "event_type":('Typ akce'),
+            "name": ('Název Události'),
+            "destination": ('Cíl cesty/Místo konání'),
+            "meeting": ('Datum a čas srazu'),
+            "ending": ('Datum a čas příjezdu'),
+            "departure": ('Místo srazu'),
+            "arrival": ('Místo ukončení'),
+            "notes": ('Co s sebou?'),
+            "capacity": ("Maximální počet účastníků"),
+            "price":("Celková cena/Vstupné"),
+            "description":("Detailnější popis akce a její průběh"),
+            "travel":("Vlastní doprava")
+        }
+        widgets={
+            'organizedBy':forms.TextInput(attrs={'class':'form-control'}),
+            'event_type': forms.Select(attrs={'class':'form-control',}, choices=Event.EVENT_TYPES),
+            "name": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
+            "destination": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
+            "meeting": DateTimeInput(attrs={'class':'form-control','type': 'datetime-local', 'format': '%Y-%m-%dT%H:%M'}),
+            'ending': DateTimeInput(attrs={'class':'form-control','type': 'datetime-local', 'format': '%Y-%m-%dT%H:%M'}),
+            "departure": forms.TextInput(attrs={'class':'form-control'}),
+            "arrival": forms.TextInput(attrs= {'class':'form-control'}),
+            "notes": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
+            "capacity": forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
+            "price": forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max':100000}),
+            "description": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
+            "travel":forms.CheckboxInput(attrs={'class':'form-check-input','id':'checkbox'}),
         }
