@@ -1,0 +1,99 @@
+@media (max-width: 750px) {
+main{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.wideScreen{
+    display: none;
+}
+.slimScreen{
+    display: flex;
+    width: 100%;
+    color: #f5f5f5;
+    background: #13243b;
+}
+.slimScreen button{
+    margin: 1%;
+    width: 13%;
+    align-self: flex-end;
+}
+.slimScreen .topnav{
+    width:85%;
+    display:none;
+    transition: 0.5;
+}
+.slimScreen .topnav ul{
+    width: 100%;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    margin:0;
+    padding:0;
+}
+.slimScreen .topnav ul a{
+    text-align: center;
+    width: 100%;
+    min-height: 1.5rem;
+    margin: 0.3rem 0;
+    color: #f5f5f5;
+    text-decoration: none;
+}
+.slimScreen .topnav ul a:visited{
+    color: #f5f5f5;
+    text-decoration: none;
+}
+.slimScreen i{
+    color:#f5f5f5;
+}
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease; /* Optional: Add a smooth transition effect */
+}
+main h1{
+    font-size: x-large;
+}
+.card{
+    margin: 1rem 0;
+}
+.content{
+    justify-content: flex-start;
+}
+.profile{
+    justify-content: flex-start;
+    padding: 0 1rem;
+}
+.profile h1{
+    font-size: xx-large;
+}
+.profile h2{
+    font-size: x-large;
+
+}
+.profile .card{
+    width: 96%;
+}
+.extratopspace{
+    margin-top: 1rem;
+}
+.profile .card ul li{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+}
+.evnt{
+    justify-content: flex-start; 
+}
+
+.welcome{
+    padding: 0 1rem;
+}
+}
