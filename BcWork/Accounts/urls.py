@@ -28,7 +28,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/',PasswordResetConfirmView.as_view(), name='password_reset_confirm '),
     path('reset_complete',PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     #errors
-    path("",views.nothingToShow, name="404"),
+    path("",views.signIn, name="404"),
     #development only 
     # path("test",views.tester,name="test"),
     # path("testF",views.testF,name="testF"),

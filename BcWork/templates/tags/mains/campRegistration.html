@@ -85,6 +85,11 @@
                                         </li>
                                         {% endfor %}
                                     </ul>
+                                    <select class="form-control" id="mail" name="mail">
+                                        {% for mail in mails  %}
+                                        <option value="{{mail.username}}">{{mail.username}}</option>
+                                        {% endfor %}
+                                      </select>
                                     <button type="submit" class="btn btn-primary" >Uložit změny</a>
                                 </form>
                             </div>

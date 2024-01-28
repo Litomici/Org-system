@@ -4,6 +4,7 @@ from datetime import datetime
 from django.db.models import Q
 from Events.models import Event
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 
 def has_account(user):
     """
@@ -59,7 +60,30 @@ def isUserLogged(request):
         else:
             return False
     return False
+def send_email_with_attachments(subject, message, from_email, recipient_list, attachments=[]):
+    """
+    function to send and email with or with out attachments
 
+    Args:
+        subject (string): mail subject(headline)
+        message (string): mail body
+        from_email (string): mail to be send from
+        recipient_list (list, strings): list of all emails i want to send to
+        attachments (list, optional): list of path to files i want to send Defaults to [].
+    """
+    email = EmailMessage(
+        subject,
+        message,
+        from_email,
+        recipient_list,
+    )
+
+    # Attach files to the email
+    for attachment in attachments:
+        email.attach_file(attachment)
+
+    # Send the email
+    email.send()
 def isUserLoggedWithPermission(request,perm):
     """verify a user and his permission to access certain parts
 
@@ -117,7 +141,8 @@ def getUsersAccount(request):
     account = get_object_or_404(Account, users=request.user)
     return account
 def get_upcoming_events():
-    """querry over Event table. Looking only for not outdated actions also sorts them by date.
+    """
+    querry over Event table. Looking only for not outdated actions also sorts them by date.
 
     Returns:
         array[Event]: array of Evetns objects
@@ -129,7 +154,8 @@ def get_upcoming_events():
 
     return upcoming_events
 def get_filtered_events(attributes):
-    """filtering function for evetns by given atributes. atributes must be names of params of Event table. also sorted by meeting date
+    """
+    filtering function for evetns by given atributes. atributes must be names of params of Event table. also sorted by meeting date
 
     Args:
         attributes (array[string]): array of strings representations of atributes of Event table

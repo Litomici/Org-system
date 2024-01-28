@@ -1,4 +1,6 @@
 from math import e
+from Litomici_memeber_system.settings import EMAIL_HOST
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render,redirect
@@ -18,6 +20,7 @@ def eventActions(request):
         }
         return render(request, "tags/mains/eventAction.html", dic)
     else:
+        
         return HttpResponseRedirect(reverse('account:logged'))  
 def eventActionEdit(request):
     if isUserLoggedWithPermission(request,1):
@@ -265,5 +268,56 @@ def details(request, event_id):
         return render(request,"tags/mains/listEvent.html",dic)
     else:
         return HttpResponseRedirect(reverse('account:logged'))
+def campReg(request,event_id):
+    if isUserLogged(request):
+        event = get_object_or_404(Event, id=event_id)
+        acc=getUsersAccount(request)
+        dic={
+            "role":acc.position,
+            "event":event,
+            "accountMembers":acc.member,
+            "mails":acc.users.all(),
+            
+        }
+        if request.method == 'POST':
+            signIn=False
+            signOut=False
+            for member in getUsersAccount(request).member.all():
+                checkbox_id = f'mem{member.ATOM_id}'
+                if checkbox_id in request.POST:
+                    tmp=request.POST[checkbox_id]
+                    
+                    
+                    # Checkbox is checked
+                    if tmp == 'on' and member not in event.assigned.all():
+                        event.assigned.add(member)
+                        signIn=True
 
+                    elif tmp !="on"and member in event.assigned.all():
+                        event.assigned.remove(member)
+                        signOut=True
+                else: 
+                    if member in event.assigned.all():
+                        event.assigned.remove(member)
+                        signOut=True
+
+            # Save the changes to the database
+            subject = 'camp reg'
+            message = 'Dobrý den děti se hlásí na tábor'
+            from_email = EMAIL_HOST
+            recipient_list = [request.POST["mail"]]
+            attachments = ['extraFiles/bezinfekcnost.pdf']
+
+            send_email_with_attachments(subject, message, from_email, recipient_list, attachments)
+            event.save()
+            dic={
+            "role":getUsersAccount(request).position,
+            "event":event,
+            "accountMembers":getUsersAccount(request).member,
+            "mails":acc.users.all(),
+        }
+        return render(request,"tags/mains/campRegistration.html",dic)  
+    else:
+        messages.error(request,"Platnost přihlášení vypršela")
+        return HttpResponseRedirect(reverse('account:logged'))
     

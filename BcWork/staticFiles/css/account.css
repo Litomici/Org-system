@@ -351,7 +351,7 @@ display: none;
     flex-direction: column;
     align-items: center;
 }
-.camps .btn-row button{
+.camps .btn-row a button{
     width: clamp(25%,10rem,50%);
     height: clamp(2rem, 3.5%,4rem);
     cursor: pointer;

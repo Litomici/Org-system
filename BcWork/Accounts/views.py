@@ -277,6 +277,7 @@ def signIn(request):
 def sign_out(request):
     logout(request)
     messages.success(request,"Uživatel byl úspěšně odlhlášen")
+    return signIn(request)
 # account data
 def userData(request):
     dic={

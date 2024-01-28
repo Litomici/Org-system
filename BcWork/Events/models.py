@@ -1,6 +1,7 @@
 from email.policy import default
 from tokenize import blank_re
 from unittest.util import _MAX_LENGTH
+import uuid
 from django.db import models
 from Accounts.models import member
 
