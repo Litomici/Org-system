@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import json
 from operator import truediv
+from pickle import TRUE
 import dj_database_url
 from pathlib import Path
 from django.core.mail.backends.console import EmailBackend
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wx6^cl3o#*h(cv7ax2f$rt53fasb=jq#6tk@7!5%_pom!&poft'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = TRUE
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800
 ALLOWED_HOSTS = ['*']
