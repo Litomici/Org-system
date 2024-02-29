@@ -30,8 +30,8 @@ class EventCreationForm(ModelForm):
             "departure": forms.TextInput(attrs={'class':'form-control'}),
             "arrival": forms.TextInput(attrs= {'class':'form-control'}),
             "notes": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
-            "capacity": forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
-            "price": forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max':100000}),
+            "capacity": forms.NumberInput(attrs={'class': 'form-control','value':30, 'min': 0, 'max': 100}),
+            "price": forms.NumberInput(attrs={'class': 'form-control','value':0, 'min': 0, 'max':100000}),
             "description": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
             "travel":forms.CheckboxInput(attrs={'class':'form-check-input','id':'checkbox'}),
         }
