@@ -451,3 +451,11 @@ display: none;
     width:100%;
     min-height:5rem;
 }
+.remMem{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+}

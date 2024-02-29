@@ -109,7 +109,7 @@ def eventActionsCreate(request):
     if isUserLoggedWithPermission(request,1):
         if request.method == "POST":
             form = EventCreationForm(request.POST)
-            if form.is_valid():
+            if form:
                 tmp = form.save(commit=False)
                 tmp.organizedBy = request.user.username
                 ending_value = form.cleaned_data['ending']
