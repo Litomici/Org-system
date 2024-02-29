@@ -109,15 +109,17 @@ def eventActionsCreate(request):
     if isUserLoggedWithPermission(request,1):
         if request.method == "POST":
             form = EventCreationForm(request.POST)
-            if form:
-                tmp = form.save(commit=False)
-                tmp.organizedBy = request.user.username
+            if form.is_valid():
+                
                 ending_value = form.cleaned_data['ending']
                 meeting_value = form.cleaned_data['meeting']
                 if not ending_value:
                     ending_value = meeting_value + timedelta(hours=2)
+                    tmp = form.save(commit=False)
                     tmp.ending = ending_value
-                tmp.save()
+                    tmp.save()
+                else:
+                    tmp=form.save()
                 if tmp is not None:
                     form = EventCreationForm()
                     dic={
