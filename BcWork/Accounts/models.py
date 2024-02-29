@@ -12,7 +12,7 @@ class member(models.Model):
     birthday = models.DateField(default=now())
     ATOM_id=models.CharField(max_length=18, blank=True)
     GDPR=models.BooleanField(default=True)
-    healthProblems=models.CharField(default="Dítě nemá žádná zdravotní omezení ani speciální požadavky na stravu či zacházení")
+    healthProblems=models.CharField(max_length=500,default="Dítě nemá žádná zdravotní omezení ani speciální požadavky na stravu či zacházení")
     objects = models.Manager()
     def __str__(self):
             return self.jmeno +" "+ self.surname
@@ -21,14 +21,14 @@ class Account(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)#pro prihlaseni
     users = models.ManyToManyField(User, related_name='access_users',default=[user]) # Many users can be associated with one account
     #Kontaktni údaje na Rodice - nutne
-    addres1=models.CharField(default="")
-    city1=models.CharField(default="")
-    psc1=models.CharField(default="")
+    addres1=models.CharField(default="",max_length=255)
+    city1=models.CharField(default="",max_length=100)
+    psc1=models.CharField(default="",max_length=15)
     mobile1=models.CharField(max_length=13, default="")
     #kontaktni udaje na 2. rodice nebo jinou poverenou osobu - cislo a mail nutne
-    addres2=models.CharField(default="", blank=True)
-    city2=models.CharField(default="", blank=True)
-    psc2=models.CharField(default="", blank=True)
+    addres2=models.CharField(default="",max_length=255, blank=True)
+    city2=models.CharField(default="",max_length=100, blank=True)
+    psc2=models.CharField(default="", max_length=15, blank=True)
     mobile2=models.CharField(max_length=13, default="")
     #dalsi udaje vazane k ucu
     wallet=models.FloatField(default=(0.0))
