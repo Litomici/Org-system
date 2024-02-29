@@ -167,7 +167,8 @@ def add_member_to_account(request):
         messages.error(request,MSG.timeOut)
         return redirect('account:login')
 def newMember(request):
-    if isUserLogged:
+    if isUserLogged(request):
+        account = getUsersAccount(request)
         if request.method == 'POST':
             form = NewMemeberForm(request.POST)
             print(form.errors.as_text())
@@ -182,10 +183,10 @@ def newMember(request):
             else:
                 messages.error(request, MSG.newMemberValidFail(form.errors.items()))
                 form = NewMemeberForm()
-                return render(request, 'tags/mains/newMember.html', {'form': form,"role":request.user.account.position})
+                return render(request, 'tags/mains/newMember.html', {'form': form,"role":account.position})
         else:
             form = NewMemeberForm() 
-        return render(request, 'tags/mains/newMember.html', {'form': form,"role":request.user.account.position})
+        return render(request, 'tags/mains/newMember.html', {'form': form,"role":account.position})
     else:
         messages.error(request,MSG.timeOut)
         return redirect("account:login")    
@@ -401,6 +402,7 @@ def changeData(request):
             if form.is_valid():
                 state1 = form.cleaned_data["state1"]
                 state2=form.cleaned_data["state2"]
+                account.mobile1 = form.cleaned_data['mobile1']
                 account.mobile2 = form.cleaned_data['mobile2']
                 account.addres1=form.cleaned_data['addres1']
                 account.addres2=form.cleaned_data['addres2']

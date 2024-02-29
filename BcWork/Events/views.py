@@ -11,6 +11,7 @@ from.forms import *
 from django.contrib import messages
 from django.db.models import F
 from datetime import timedelta
+from django.utils import timezone
 from Litomici_memeber_system import messages as MSG
 def eventActions(request):
     if isUserLoggedWithPermission(request,1):
@@ -313,7 +314,15 @@ def listAll(request,event_id=None):
         return HttpResponseRedirect(reverse('account:logged'))
 def listCamps(request):
     if isUserLogged(request):
-        camptype_events = Event.objects.filter(event_type='tabor_vyprava')
+        # Dnešní datum a čas
+        today = timezone.now()
+        # Pokud je aktuální čas po půlnoci, upravíme dnešní datum o 1 den zpět
+        if today.hour < 1:
+            today = today - timedelta(days=1)
+        # Nastavení času na 1:00 AM
+        time_limit = today.replace(hour=1, minute=0, second=0, microsecond=0)
+        print(time_limit)
+        camptype_events =  Event.objects.filter(event_type='tabor_vyprava', meeting=time_limit)
     # Get members associated with the current account
         dic={
             'camps': camptype_events,

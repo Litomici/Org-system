@@ -37,9 +37,9 @@
                               {% for member in accountMembers.all %}
                              
                               <li class="frame">
-                                  <label class="container" for="mem{{member.ATOM_id}}"> {{ member.jmeno }} {{ member.surname }} 
+                                  <label class="container" for="{{event.id}}mem{{member.ATOM_id}}"> {{ member.jmeno }} {{ member.surname }} 
                                   {% if member in event.assigned.all %}
-                                  <input type="checkbox" checked="checked" id="mem{{member.ATOM_id}}" name="mem{{member.ATOM_id}}">
+                                  <input type="checkbox" checked="checked" id="{{event.id}}mem{{member.ATOM_id}}" name="mem{{member.ATOM_id}}">
                                   <span class="checkmark"></span>
                                   {% else %}
                                   <input type="checkbox"id="mem{{member.ATOM_id}}"  name="mem{{member.ATOM_id}}">
