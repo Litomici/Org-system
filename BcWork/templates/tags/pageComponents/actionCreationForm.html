@@ -1,11 +1,11 @@
-<form method="post" action="">
+<form method="post" action="{% url "event:tool-create" %}">
     {% csrf_token %}
-    <div class="form-row">
+    <div class="form-row hiddenOF">
       <div class="form-group col-md-6">
         <label for="contact">Email na Organizátora</label><br>
-       <input class="form-control" type="text" value="{{request.user.username}}" readonly>
+        {{form.organizedBy}}
       </div>
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-6 ">
         <label for="{{ form.event_type.id_for_label }}">Typ akce</label>
         {{ form.event_type }}
         
@@ -58,5 +58,5 @@
         <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
       {{ form.description }}
     </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+    <button type="submit" class="btn btn-primary">Vytvořit událost</button>
   </form>

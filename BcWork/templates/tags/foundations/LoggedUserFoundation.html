@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="{% static 'css/general.css'%}">
         <link rel="stylesheet" href="{% static 'css/account.css'%}">
         <link rel="stylesheet" href="{% static 'css/account-navbar.css'%}">
+        <link rel="stylesheet" href="{% static 'css/logged-responsive.css'%}">
         {% comment %} <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> {% endcomment %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
@@ -29,9 +30,13 @@
                 </div>
         </header>
         <main>
-            <table class="main-tab">    
+            <div class="slimScreen">
+            {% include "tags/pageComponents/topNavbar.html" %}
+            
+            </div>
+            <table class="main-tab">
                 <tr>
-                <td class="main-coll-nav">
+                <td class="main-coll-nav wideScreen ">
                     {%include "tags/pageComponents/sideNavbar.html"%}
                 </td>
                 <td rowspan="2" class="main-coll-cont">
@@ -41,7 +46,7 @@
                 </td>
                 </tr>
                 <tr>
-                    <td class="main-coll-Lout">
+                    <td class="main-coll-Lout wideScreen">
                         <div class="logout">
                             <a href="{% url "account:logout" %}"><button type="button" class="btn btn-light">Odhlásit se</button></a>
                         <div>

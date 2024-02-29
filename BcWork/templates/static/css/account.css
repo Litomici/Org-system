@@ -11,8 +11,12 @@ main{
     padding: 0;
     display: flex;
     flex-direction: column;
+    text-align: center;
     width: 100%;
     min-height: 80vh;
+}
+.center-text {
+    text-align: center;
 }
 /* Úvodní strana */
 .welcome{
@@ -118,9 +122,6 @@ main{
 }
 /* seznam akcí */
 
-.table{
-    
-}
 .activity-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -351,7 +352,7 @@ display: none;
     flex-direction: column;
     align-items: center;
 }
-.camps .btn-row button{
+.camps .btn-row a button{
     width: clamp(25%,10rem,50%);
     height: clamp(2rem, 3.5%,4rem);
     cursor: pointer;
@@ -416,4 +417,7 @@ display: none;
 }
 .invis{
     display: none;
+}
+.mrg{
+    margin-top: 2rem;
 }

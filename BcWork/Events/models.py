@@ -20,7 +20,7 @@ class Event(models.Model):
     meeting=models.DateTimeField()#den a čas odjezdu
     ending=models.DateTimeField(blank=True)# den a čas příjezdu
     departure=models.CharField(max_length=100)# místo odjezdu
-    arrival=models.CharField(default="Upřesníme v den odjezdu", max_length=100, blank=True)#místo příjezdu
+    arrival=models.CharField(default="Včas upřesníme", max_length=100, blank=True)#místo příjezdu
     notes=models.CharField(default="Dobrou náladu", blank=True)# s sebou a poznámky
     assigned=models.ManyToManyField(member, related_name='assigners', blank=True)# přihlášení
     attendance=models.ManyToManyField(member, related_name='attendance', blank=True)# zúčastnění

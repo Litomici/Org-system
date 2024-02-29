@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-DATABASES['default']=dj_database_url.parse('postgres://litomici_login_system_database_user:Vb5Ax8SDdEGTus68EkDq8RfDQaW8FR28@dpg-cld8bd7gsrdc73fja67g-a.frankfurt-postgres.render.com/litomici_login_system_database')
+DATABASES['default']=dj_database_url.parse('postgres://litomcamp_user:bet39DNkwziSth6ARWsMsCSEOsgx3cUC@dpg-cn96jfud3nmc73dgutjg-a.frankfurt-postgres.render.com/litomcamp')
 
 
 # Password validation
@@ -129,6 +129,18 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+##tady je problém s držením db 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379/1',
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#             'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+#         }
+#     }
+# }
 
 
 # Static files (CSS, JavaScript, Images)

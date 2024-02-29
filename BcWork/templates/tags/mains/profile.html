@@ -10,9 +10,6 @@
                 <h2>Kontaktní údaje pro členy tohoto účtu</h2>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item profileInformation">{{mail}}
-                      <a href="/AddNewUser"><button type="button" style="line-height: none;" class="addUSER btn btn-outline-secondary"title="Vytvořit další přístup">
-                        <i class="fa-solid fa-plus"></i>
-                      </button></a>
                     </li> 
                     <li class="list-group-item profileInformation">Peněženka: {{wallet}}</li>
                     <li class="list-group-item profileInformation">{{addr1}} </li>
@@ -26,6 +23,14 @@
                     <li class="list-group-item profileInformation">{{mobile2 }}</li>
                   </ul>
                   {% endif %}
+                  <div>
+                    <a href={% url "account:addNewUser" %} class="btn btn-secondary extratopspace">
+                    Přidat přístup
+                    </a>
+                    <a href={% url "account:changeData" %} class="btn btn-info extratopspace">
+                      Upravit data
+                    </a>
+                  </div>
             </div>
             <div class="card-body">
               <h2 class="card-title">Členové tohoto účtu</h2>
@@ -46,7 +51,7 @@
                   {%endfor%}
                 {%endif%}
               </p>
-              <a href="addMember" class="btn btn-primary">Přidat dalšího člena</a> <a href="removeMember" class="btn btn-primary">Odebrat člena</a>
+              <a href="addMember" class="btn btn-primary extratopspace">Přidat dalšího člena</a> <a href="removeMember" class="btn btn-primary extratopspace">Odebrat člena</a>
             </div>
             <div class="card-footer text-muted">
               2 days ago

@@ -14,6 +14,8 @@ urlpatterns = [
     path("profileInfo",views.userData, name="profile"),
     path("removeMember",views.removeMember,name="removeMemeber"),
     path("addMember",views.add_member_to_account,name="addMember"),
+    path("changeData", views.changeData, name="changeData"),
+    path("showMembers&Accounts",views.showMembers, name="showMembers"), # type: ignore
     #creating new entity
     path("register",views.signUp, name="signUp"),
     path('newAccount',views.NewAccount, name='newAccount'),

@@ -1,9 +1,25 @@
 from tkinter.tix import Form
 from django.forms import DateTimeInput, ModelForm
 from django import forms
+from django.core.exceptions import ValidationError
+
 from .models import Account,member
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+
+def validate_mobile_number(value):
+    allowed_chars = set("0123456789+")
+    if not set(value).issubset(allowed_chars):
+        raise ValidationError("Nedovolené znaky v telefoním čísle.")
+def validate_psc_number(value):
+    allowed_chars = set("0123456789 ")
+    if not set(value).issubset(allowed_chars):
+        raise ValidationError("nesprávné znaky v PSC")
+def validate_alpha_characters(value):
+    if not value.isalpha():
+        allowed_chars = set(" -'()")
+        if not set(value).issubset(allowed_chars) :
+            raise ValidationError("Názvy měst mohou obsahovat pouze písmena")
 
 
 class NewMemeberForm(ModelForm):
@@ -20,7 +36,7 @@ class NewMemeberForm(ModelForm):
         widgets={
             "jmeno": forms.TextInput(attrs={'class':'form-control form-control-lg','pattern': '^[A-Za-zÀ-ÖØ-öø-ÿĀ-žſ]+$'}),
             "surname": forms.TextInput(attrs={'class':'form-control form-control-lg','pattern': '^[A-Za-zÀ-ÖØ-öø-ÿĀ-žſ]+$'}),
-            "birthday": forms.DateInput(attrs={'type': 'date'}),
+            "birthday": forms.DateInput(attrs={'type': 'date','class':'form-control'}),
             "GDPR": forms.CheckboxInput(attrs={'class':'form-check-input','id':'checkbox'}),
             "healthProblems": forms.Textarea(attrs= {"class":"form-control", "id":"exampleFormControlTextarea1","rows":"3"}),
         }
@@ -34,15 +50,15 @@ class NewAccountForm(ModelForm):
             "addres1": ('Adresa bydliště'),
             "city1": ('Město'),
             "psc1": ('PSČ'),
-            "mobile2":('Telefon na druhého rodiče nebo jiného člena rodiny pro případ nouze')
+            "mobile2":('Telefon na druhého rodiče nebo jiného člena rodiny')
         }
         widgets={
-            "user":"",
-            "mobile1": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
-            "addres1": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
-            "city1": forms.TextInput(attrs= {'class': 'col-sm-4 col-form-label'}),
-            "psc1": forms.TextInput(attrs= {'class': 'col-sm-4 col-form-label'}),
-            "mobile2":forms.TextInput(attrs= {'class': 'col-sm-4 col-form-label'})
+            "user": forms.TextInput(attrs= {'class':'form-control','readonly':'readonly'}),
+            "mobile1": forms.TextInput(attrs={'class':'form-control'}),
+            "addres1": forms.TextInput(attrs={'class':'form-control'}),
+            "city1": forms.TextInput(attrs= {'class': 'form-control'}),
+            "psc1": forms.TextInput(attrs= {'class': 'form-control'}),
+            "mobile2":forms.TextInput(attrs= {'class': 'form-control'})
         }
         
 class UserRegistrationForm(UserCreationForm):
@@ -70,7 +86,7 @@ class AddUserForm(forms.Form):
     newUserEmail = forms.EmailField(
         label="Email, kterému chcete umožnit přístup.",
         required=True,
-        widget=forms.TextInput(attrs={'class': 'your-custom-class'})
+        widget=forms.TextInput(attrs={'class': 'form-control mb-8'})
     )
 class SetPasswordForm(forms.Form):
     password1 = forms.CharField(
@@ -81,4 +97,61 @@ class SetPasswordForm(forms.Form):
         label="Potvrzení hesla",
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
-    
+
+class changeDataForm(forms.Form):
+    mobile1 = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[validate_mobile_number]
+        )
+    addres1 = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        )
+    city1 = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[validate_alpha_characters]
+        )
+    psc1 = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[validate_psc_number]
+        )
+    state1 = forms.ChoiceField(
+        choices=(
+            ('', 'Vyberte'),
+            ('Česko', 'Česko'),
+            ('Slovensko', 'Slovensko'),
+            ('Německo', 'Německo'),
+            ('Polsko', 'Polsko'),
+            ('jiné', 'jiné'),
+        ),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+    mobile2 = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[validate_mobile_number]
+        )
+    addres2= forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=False
+        )
+    city2= forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[validate_alpha_characters],
+        required=False
+        )
+    psc2= forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[validate_psc_number],
+        required=False
+        )
+    state2 = forms.ChoiceField(
+        choices=(
+            ('', 'Vyberte'),
+            ('Česko', 'Česko'),
+            ('Slovensko', 'Slovensko'),
+            ('Německo', 'Německo'),
+            ('Polsko', 'Polsko'),
+            ('jiné', 'jiné'),
+        ),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False
+    )

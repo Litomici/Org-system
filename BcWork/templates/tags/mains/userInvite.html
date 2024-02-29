@@ -1,27 +1,16 @@
 {% extends "tags/foundations/LoggedUserFoundation.html" %}
 {%block main%}
-    {% include "tags/pageComponents/sideNavbar.html" %}
-    
     <div class="content">
     {% block Content %}
-    <script>
-        function msgShow(txt) {
-          alert(txt);
-        }
-    </script>
-        <h1>Přizvěte další osobu do vašeho účtu</h1><br>
-        {% for message in messages%}
-        <script>
-                msgShow("{{message}}");
-        </script>
-        {{message}}
-        {%endfor%}
-        
+        <h1 class="extratopspace mrg">Přizvěte další osobu do vašeho účtu</h1><br>        
         <form method="post" action="">
             {% csrf_token %}
-            {{ form.newUserEmail.label_tag }}
-            {{ form.newUserEmail }}
-            <button type="submit" class="btn btn-lg btn-primary">Odeslat Pozvánku</button>
+            <div class="noPadding row justify-content-center center-text ">
+                <div class="col-md-5 center-text">{{ form.newUserEmail.label_tag }}<br>
+            {{ form.newUserEmail }}<br>
+        </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary extratopspace">Odeslat pozvánku</button>
         </form>
     {% endblock %}
 </div>

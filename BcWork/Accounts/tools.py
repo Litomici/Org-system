@@ -137,6 +137,8 @@ def membersAtomCheck():
     except Exception as e:
         return False
     return True
+def getAccountByUser(user):
+    return get_object_or_404(Account,users=user)
 def getUsersAccount(request):
     account = get_object_or_404(Account, users=request.user)
     return account
@@ -192,6 +194,25 @@ def signedMembers4Event(event):
     result += [(member, False) for member in additional_members]
 
     return result
+def getMailsFromEvent(event):
+    """function returns all emails connected to members asigned for given event
+
+    Args:
+        event (model): event object
+
+    Returns:
+        set: all mails that are conected to this event
+    """
+    # Získání seznamu všech členů přihlášených k této události
+    members = event.assigned.all()
+    # Pro každého člena získat všechny účty, které spravuje
+    accounts = give_accounts(members)
+    # Sbírání unikátních e-mailových adres těchto účtů
+    emails = set()
+    for account in accounts:
+        emails.add(account.user.username)
+
+    return list(emails)
 def notSignedMembers(event):
     assigned_members = event.assigned.all()
     attending_members = event.attendance.all()
@@ -203,3 +224,6 @@ def notSignedMembers(event):
     sorted_members = not_signed_members.order_by('jmeno')
 
     return sorted_members
+def give_accounts(members):
+    accounts = Account.objects.filter(member__in=members).distinct()
+    return accounts

@@ -15,4 +15,6 @@ urlpatterns = [
     path("eventTool/edit",views.eventActionEdit,name="tool-edit"),
     path("eventTool/attendance",views.eventActionAttendace,name="tool-attendace"),
     path("eventTool/attendanceOfEvent/<int:event_id>/",views.eventActionAttendace2Event,name="tool-attendace2Event"),
+    path("eventTool/cancel",views.eventActionCancle,name="tool-cancel"),
+    path("eventTool/cancelOfEvent/<int:event_id>",views.cancelingOfEvent,name="tool-cancelOfEvent"),#type: ignore
 ]

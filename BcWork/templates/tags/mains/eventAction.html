@@ -63,7 +63,7 @@
                             <th scope="col">Datum</th>
                             <th scope="col">Jméno akce</th>
                             <th scope="col">Kapacita</th>
-                            <th scope="col">Detaily</th>
+                            <th class="wideScreen" scope="col">Detaily</th>
                             <th scope="col">Upravit</th>
                           </tr>
                         </thead>
@@ -73,7 +73,7 @@
                               <th scope="row">{{ event.meeting|date:"F d, Y H:i" }}</th>
                               <td>{{ event.name }}</td>
                               <td>{{event.assigned.all|length }}/{{event.capacity}}</td>
-                              <td><a href="{% url "event:details" event.id %}">Info</td>
+                              <td class="wideScreen"><a href="{% url "event:details" event.id %}">Info</td>
                                 <td> <button onclick="editCurrentEvent('{{event.name}}','{{ event.destination}}','{{ event.meeting|date:"Y-m-d\TH:i" }}','{{ event.ending|date:"Y-m-d\TH:i" }}','{{ event.departure}}','{{ event.arrival}}','{{ event.event_type}}','{{ event.notes}}',{{ event.capacity}},{{ event.price}},'{{ event.description}}','{{event.id}}','{{event.organizedBy}}')" class="btn btn-primary" type="button">
                                   Upravit
                               </button>
@@ -87,7 +87,10 @@
 
         {% endif %}
         {% if eventAction == 3 %}
-        {%include "tags/pageComponents/actionAttendaceForm.html"%}
+          {%include "tags/pageComponents/actionAttendaceForm.html"%}
+        {% endif %}
+        {% if eventAction == 4 %}
+          {%include "tags/pageComponents/actionCancelForm.html"%}
         {% endif %}
     </div>
     {% endblock %}

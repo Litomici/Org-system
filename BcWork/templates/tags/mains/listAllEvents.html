@@ -2,7 +2,7 @@
 {%block main%}
   <div class="content" onload="setHeight()" id="'object2'">
     {% block Content %}
-    <div class="profile" id="Profile">
+    <div class="profile noPadding*" id="Profile">
         <h1>Přehled všech plánovaných aktivit</h1>
         <br>
         <table class="table">
@@ -12,7 +12,7 @@
               <th scope="col">Jméno akce</th>
               <th scope="col">Kapacita</th>
               <th scope="col">Detaily</th>
-              <th scope="col">Přihlášky</th>
+              <th scope="col" class="wideScreen">Přihlášky</th>
             </tr>
           </thead>
           <tbody>
@@ -22,12 +22,12 @@
                 <td>{{ event.name }}</td>
                 <td>{{event.assigned.all|length }}/{{event.capacity}}</td>
                 <td><a href="{% url 'event:details' event.id %}">Info</a></td>
-                  <td> <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#members2sign{{event.id}}" aria-expanded="false" aria-controls="collapseExample">
+                  <td class="wideScreen"> <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#members2sign{{event.id}}" aria-expanded="false" aria-controls="collapseExample">
                     Přihlásit/Odhlásit
                 </button>
               </td>
                </tr>
-               <tr>
+               <tr class="wideScreen">
                 <td colspan=5>
                 <div class="collapse" id="members2sign{{event.id}}">
                   <div class="card card-body">

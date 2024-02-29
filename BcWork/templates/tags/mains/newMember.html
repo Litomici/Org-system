@@ -1,14 +1,6 @@
 {% extends "tags/foundations/LoggedUserFoundation.html" %}
 {%block main%}
-<style>
-    .form-check-input{
-        float:left;
-        position: relative;
-        margin:0.5rem 0.3rem 0 0;
-        padding:0;
 
-    }
-</style>
     <div class="content">
     {% block Content %}
     <div class="profile" id="Profile">
@@ -19,8 +11,31 @@
         {% endfor %}
         <form action="" method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="create">
+            <div class="form-row">
+                <div class="col">
+                    {{form.jmeno.label}}
+                    {{form.jmeno}}
+                </div>
+                <div class="col">
+                    {{form.surname.label}}
+                    {{form.surname}}
+                </div>
+              </div>
+              <div class="form-row">
+               {{form.birthday.label}}{{form.birthday}}
+              </div>
+              <div>
+                {{form.healthProblems.label}}
+                {{form.healthProblems}}
+              </div>
+              <div class="form-group">
+                <div class="form-check">
+                  {{form.GDPR}}
+                  {{form.GDPR.label}}
+                </div>
+              </div>
+            
+            <input type="submit" class="btn btn-success" value="create">
         </form>
 
         

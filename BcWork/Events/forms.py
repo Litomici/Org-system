@@ -21,6 +21,7 @@ class EventCreationForm(ModelForm):
             "travel":("Vlastní doprava")
         }
         widgets={
+            "organizedBy":forms.TextInput(attrs= {'class':'form-control','readonly':'readonly'}),
             'event_type': forms.Select(attrs={'class':'form-control'}, choices=Event.EVENT_TYPES),
             "name": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
             "destination": forms.TextInput(attrs={'class':'form-control form-control-lg'}),
@@ -69,3 +70,19 @@ class EventEditForm(ModelForm):
             "description": forms.Textarea(attrs= {"class":"form-control","rows":"3"}),
             "travel":forms.CheckboxInput(attrs={'class':'form-check-input','id':'checkbox'}),
         }
+class EventCancelForm(forms.Form):  # Use forms.Form instead of forms.ModelForm
+    event_id = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control", "readonly": True}),
+        label="Event ID"
+    )
+    sendMail = forms.BooleanField(
+        label='Ano, opravdu chci informavat všechny přihlášené o zrušení tété akce',
+        initial=True,
+        required=True,
+        widget=forms.CheckboxInput(attrs={"class": ""})
+    )
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": "4"}),
+        label="Zpráva pro přihlášené: Akce se ruší z důvodu ...",
+        required=True,
+    )

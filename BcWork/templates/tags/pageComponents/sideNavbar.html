@@ -13,6 +13,6 @@
     {% endif %}
     {%if  role >= 3 %}
     <!-- for Admin/heads -->
-        <li>Správa členů</li>
+    <a href="{% url "account:showMembers" %}"><li>Správa členů</li></a>
     {% endif %}
 </ul>

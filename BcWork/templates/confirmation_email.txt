@@ -1,7 +1,7 @@
 Nazdárek příteli,
 
 Tento email byl vygenerován někým, kdo si přeje, abys měl přístup k jeho účtu. Za tímto účelem přikládáme odkaz, pomocí něhož celou akci dokončíš.
-http://127.0.0.1:8000/{% url 'setPasswd' token=token %}
+http://127.0.0.1:8000/{% url 'account:setPasswd' token=token %}
 
 Pokud si nejsi vědom, že by tě někdo měl chtít ve svém účtu. Tento email ignoruj, odkaz pozbyde platnosti po 10 min od odeslání.
 Děkujeme za vaší podporu.

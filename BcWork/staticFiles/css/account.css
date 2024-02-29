@@ -11,8 +11,12 @@ main{
     padding: 0;
     display: flex;
     flex-direction: column;
+    text-align: center;
     width: 100%;
     min-height: 80vh;
+}
+.center-text {
+    text-align: center;
 }
 /* Úvodní strana */
 .welcome{
@@ -118,9 +122,6 @@ main{
 }
 /* seznam akcí */
 
-.table{
-    
-}
 .activity-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -416,4 +417,37 @@ display: none;
 }
 .invis{
     display: none;
+}
+.mrg{
+    margin-top: 2rem;
+}
+.form-line{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}
+.extraspace-right{
+   margin-right: 1rem;
+}
+.outerCard{
+    width:80%;
+}
+.full-line{
+    background: #007bff;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.innerCardBody{
+    width:100%;
+    min-height:5rem;
 }

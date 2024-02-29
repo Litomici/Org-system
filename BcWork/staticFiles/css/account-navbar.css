@@ -117,3 +117,6 @@ main .main-tab .main-coll-nav nav{
     font-size: inherit;
     font-family: inherit;
 }
+.slimScreen{
+    display: none;
+}

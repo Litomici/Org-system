@@ -3,7 +3,7 @@
     header{
         display: flex;
         flex-direction: column;
-        height:20vh;
+        min-height:20vh;
         line-height: 0;
         justify-content: center;
         align-items: center;
@@ -28,7 +28,7 @@
         font-size:large;
     }
     .login{
-        width: 80%;
+        width: 90%;
     }
     .login h1{
         font-size: xx-large;
@@ -39,8 +39,9 @@
     .login form h2{
         font-size: large;
     }
-    .login form label{
+    .login .logging label{
         font-size: medium;
+        width: 100%;
     }
     .login form p label{
         font-size: medium;
@@ -48,14 +49,34 @@
     .login .logging .data{
         width: 100%;
     }
+    .login .logging input{
+        font-size: medium;
+    }
     .login .logging p .data{
         width: 100%;
     }
     .login .submit{
-        width:50%;
+        width: 50%;
     }
     .log-questions{
-        gap:0;
+        gap: 0;
     }
-
+    .form-502100 {
+        width: 100%;
+    }
+    .w-50{
+        width: 100%;
+    }
+    .address{
+        width: 100%;
+    }
+    .city{
+        width: 69%;
+    }
+    .psc{
+        width: 29%;
+    }
+    .extraMobSpace{
+        margin-top: 1rem;
+    }
 }

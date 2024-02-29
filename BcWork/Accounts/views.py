@@ -1,7 +1,7 @@
 from email import message
 from django.utils import timezone
 from django.http import Http404
-import Litomici_memeber_system
+from Litomici_memeber_system.settings import EMAIL_HOST_USER
 from .forms import EmailForm
 from django.shortcuts import render
 from django.shortcuts import redirect, render,get_object_or_404
@@ -15,6 +15,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from Litomici_memeber_system import settings
+from Litomici_memeber_system import messages as MSG
 from .models import Account,EmailConfirmation
 from datetime import datetime
 from .forms import *
@@ -31,7 +32,6 @@ def sendMessage(request):
                 subject = form.cleaned_data['subject']
                 text = form.cleaned_data['text']
                 text= "dne "+ datetime.now().strftime("%d.%m.%Y %H:%M")+"\n"+text+"\n"+request.user.username
-                print(subject+" "+text)
                # Change the email settings as per your configuration
                 # recipient_email = settings.EMAIL_HOST_USER
                 # sender_email = settings.EMAIL_HOST_USER
@@ -43,25 +43,61 @@ def sendMessage(request):
                         ['turistaklitomici@gmail.com'],
                         fail_silently=False,
                     )
-                
                     # Redirect after successful form submission
-                    messages.error(request,"Úspěšně jste odeslali zprávu")
+                    messages.success(request,MSG.contacUsSuccess)
                 except Exception as e:
-                    messages.error(request,"selhalo odesílání")
+                    messages.error(request,MSG.contactUsSendFail)
                     form = EmailForm()
                     return render(request, 'tags/mains/contacts.html', {'form': form,"done":1,'role':account.position,})
                 return HttpResponseRedirect('sendMsg')
             else:
+                errs=form.errors.items()
+                messages.error(request,MSG.contactUsFailValid(errs))
                 form = EmailForm()
-                messages.error(request,"nepodařilo se odeslat zprávu")
                 return render(request, 'tags/mains/contacts.html', {'form': form,"done":2,'role':account.position,})    
         else:
             form = EmailForm()
         return render(request, 'tags/mains/contacts.html', {'form': form,"done":3,'role':account.position,})
     else:
-        messages.error(request,"Platnost přihlášení vypršela")
+        messages.error(request,MSG.timeOut)
         return redirect("account:login")
 #member operations
+def showMembers(request):
+    if isUserLoggedWithPermission(request,1):
+        account = getUsersAccount(request)
+        allMembers=member.objects.all()
+        member2pass=[]
+        for m in allMembers:
+            if Account.objects.filter(member=m).first():
+                
+                member2pass.append(
+                    {
+                        "name":f"{m.jmeno} {m.surname}",
+                        "born":m.birthday,
+                        "phone":Account.objects.filter(member=m).first().mobile1,
+                        "id":m
+                    })
+            else:
+                member2pass.append(
+                    {
+                        "name":f"{m.jmeno} {m.surname}",
+                        "born":m.birthday,
+                        "phone": "není uvedeno",
+                        "id":m
+                    })
+        dic={
+            "role": account.position,#0=user;1=leader;2=econom;3=admin
+            "members":member2pass
+        }
+        
+        return render(request,"tags/mains/allMembers.html",dic)
+    else:
+        if isUserLogged(request):
+            messages.error(request, MSG.permDenied)
+        else:
+            messages.error(request,MSG.timeOut)
+        return redirect("account:login")
+
 def removeMember(request):
     if isUserLogged(request):
         account = getUsersAccount(request)
@@ -74,29 +110,31 @@ def removeMember(request):
                 if selected_member.ATOM_id == (request.POST.get("Atom")):
                     account.member.remove(selected_member)
                     account.save()
+                    messages.success(request,MSG.memberRemovedSuccess)
                     return redirect('account:profile')  # Redirect to the member list view or another appropriate view
                 else:
-                    messages.error(request,"Nesprávný osobní kód")
+                    messages.error(request,MSG.memberRemovedFail)
                     context = {
                     'available_members': membersInAccount,
                     'role':account.position,
                     }
                     return render(request, 'tags/mains/removeMember.html', context)
+            else:
+                messages.error(request,MSG.memberRemovedNoSelect)
         context = {
             'available_members': membersInAccount,
             'role':account.position,
         }
         return render(request, 'tags/mains/removeMember.html', context)
     else:
+        messages.error(request,MSG.timeOut)
         return redirect('account:login')
 def add_member_to_account(request):
     if isUserLogged(request):
  # Get the currently logged-in account
         account = getUsersAccount(request)
-
     # Get members associated with the current account
         members_in_account = account.member.all()
-    
     # Get all members and find those not in the current account
         all_members = member.objects.all()
         aviable_members = all_members.exclude(pk__in=members_in_account)
@@ -104,16 +142,30 @@ def add_member_to_account(request):
             selected_member_id = request.POST.get('member_id')
             if selected_member_id:
                 selected_member = member.objects.get(pk=selected_member_id)
-                account.member.add(selected_member)
-                account.save()
-                return redirect('account:profile')  # Redirect to the member list view or another appropriate view
-    
+                born_date = request.POST.get('born')
+                print("input "+born_date)
+                print(selected_member.birthday)
+                if selected_member.birthday.__str__() == born_date:
+                    print("Match")
+                    account.member.add(selected_member)
+                    account.save()
+                    messages.success(request,MSG.addMemberSuccess)
+                    return redirect('account:profile')  # Redirect to the member list view or another appropriate view
+                else:
+                    print("nomatch")
+                    # messages.error(request,MSG.timeOut)
+                    messages.error(request,MSG.addMemberFail)                
+            else:
+                print("fail")
+                messages.error(request,MSG.addMemberFail)
         context = {
             'available_members': aviable_members,
             'role':account.position,
         }
-        return render(request, 'test.html', context)
-    else: return redirect('account:login')
+        return render(request, 'tags/mains/addMember.html', context)
+    else: 
+        messages.error(request,MSG.timeOut)
+        return redirect('account:login')
 def newMember(request):
     if isUserLogged:
         if request.method == 'POST':
@@ -125,19 +177,23 @@ def newMember(request):
                 if not membersAtomCheck():
                     account = getUsersAccount(request)
                     account.wallet+=(-1200)
-                messages.success(request, 'Člen byl úspěšny vytvořen a přidán k vašemu účtu')
+                messages.success(request, MSG.createMemberSuccess)
                 return redirect('account:profile')  # Replace 'success_page' with the desired success page name or URL
             else:
-                messages.error(request, 'Člena se nepodařilo vytvořit.\n'+form.errors.as_text())
+                messages.error(request, MSG.newMemberValidFail(form.errors.items()))
                 form = NewMemeberForm()
                 return render(request, 'tags/mains/newMember.html', {'form': form,"role":request.user.account.position})
         else:
-            form = NewMemeberForm()
+            form = NewMemeberForm() 
         return render(request, 'tags/mains/newMember.html', {'form': form,"role":request.user.account.position})
     else:
+        messages.error(request,MSG.timeOut)
         return redirect("account:login")    
 #Creating account
 def signUp(request):#prvni krok registrace
+    if request.user.is_authenticated and not has_account(request.user):
+        messages.success(request,MSG.regStep1Success)
+        return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -149,15 +205,17 @@ def signUp(request):#prvni krok registrace
             if user is not None:
                 login(request, user)
                 # Redirect to the next step of registration (adjust the URL accordingly)
-                messages.success(request,"První krok Registrace byl úspěšný")
+                messages.success(request,MSG.regStep1Success)
                 return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
+            else:
+                messages.error(request,MSG.regStep1PostValidFail)
         else:
-            messages.error(request,"email není platný nebo se zadaná hesla neshodují")
+            messages.error(request,MSG.newMemberValidFail(form.errors.items()))
             form=UserRegistrationForm()
             return render(request, "tags/mains/registerUser.html", {'form': form})
     else:
         form = UserRegistrationForm()       
-    # Modify labels in the form
+    # labels settup
         form.fields['password2'].help_text = ''
         form.fields['username'].help_text = ''
         form.fields['password1'].label = 'Heslo'
@@ -165,32 +223,35 @@ def signUp(request):#prvni krok registrace
         form.fields['password2'].label = 'Potvrzení Hesla'
     return render(request, "tags/mains/registerUser.html", {'form': form})
 def NewAccount(request):#druhý krok registrace
-    if has_account(request.user):
-        return HttpResponseRedirect("logged")
-    if not request.user.is_authenticated:
-        messages.success(request,"Přihlášení vypršelo. Přihlas se znovu.")
+    
+    if not request.user.is_authenticated:#přihlášení už je propadlé
+        messages.error(request,MSG.timeOut)
         return redirect("account:login")
+    if has_account(request.user):#uživatel je přihlášen 
+        return HttpResponseRedirect("logged")
     if request.method == "POST":
         form = NewAccountForm(request.POST)
+        tmp=form.is_valid()
         if form.is_valid():
-            tmp = form.save(commit=False)
-            tmp.user = request.user  # Assign the logged-in user
-            tmp.users=[request.user]
-            tmp.save()
+            tmpr = form.save()#commit=False
+            tmpr.user = request.user  # Assign the logged-in user
+            tmpr.users.add(request.user)
+            tmpr.save()
             if tmp is not None:
+                messages.success(request,MSG.regStep2Success)
                 # Redirect to the next step of registration (adjust the URL accordingly)
                 return HttpResponseRedirect("account")
             else:
-                form = NewAccountForm()
-                messages.success(request,"Účet se nepodařilo vytvořit. Zkus to prosím znovu")
-                return render(request, "tags/mains/accountRegister.html", {'form': form})
+                form = NewAccountForm(initial={'user': request.user})
+                messages.error(request,MSG.regStep2PostValidFail)
+                return render(request, "tags/mains/accountRegister.html", {'form': form,"username":request.user.username})
         else:
-            form = NewAccountForm()
-            messages.success(request,"Údaje byly nesprávně vyplněny nebo vyplnění obsah obsahoval potentionálně nebezpečný obsah. Zkontroluj si své údaje zkus to prosím znovu")
-            return render(request, "tags/mains/accountRegister.html", {'form': form})
+            messages.error(request,MSG.newMemberValidFail(form.errors.items()))
+            form = NewAccountForm(initial={'user': request.user})
+            return render(request, "tags/mains/accountRegister.html", {'form': form,"username":request.user.username})
     else:
-        form = NewAccountForm()
-        return render(request, "tags/mains/accountRegister.html", {'form': form})
+        form = NewAccountForm(initial={'user': request.user})
+        return render(request, "tags/mains/accountRegister.html", {'form': form,"username":request.user.username})
     
 def addUserToAccount(request):
     if isUserLogged(request):
@@ -201,35 +262,38 @@ def addUserToAccount(request):
                 email = form.cleaned_data['newUserEmail']
                 if not is_username_available(email):
                     form = AddUserForm()
-                    messages.error(request,"Uživatel s emailem "+email+" již existuje a má svůj vlastní účet\n Zkontrolujte adresu zkuste to znovu.\n Nebojte se nás v případě potřeby kontaktovat.")
+                    messages.error(request,MSG.addUserAllrdyUsed(email))
                     return render(request, 'tags/mains/userInvite.html', {'form': form,'role':account.position,})
             # Generate and send confirmation link
                 try:
                     email_confirmation = EmailConfirmation.create(email=email,sender=request.user.username)
+                    print("povedlo se")
                     email_confirmation.send_confirmation_email()
-                    messages.error(request,"Úspěšně jste odeslali pozvánku na email "+email)
+                    print("povedlo se 2")
+                    messages.error(request,MSG.addUserSuccess(email))
                     return render(request, 'tags/mains/userInvite.html', {'form': form,'role':account.position,})
-                except:
+                except Exception as e:
                     form = AddUserForm()
-                    messages.error(request,"Nepodařilo se odeslat pozvánku na email "+email+"\nZkontrolujte adresu zkuste to znovu.")
+                    print("Exception:", e)
+                    messages.error(request,MSG.addUserfail(email))
                     return render(request, 'tags/mains/userInvite.html', {'form': form,'role':account.position,})
         else:            
             form = AddUserForm()      
             return render(request, 'tags/mains/userInvite.html', {'form': form,'role':account.position,})
     else:
-        messages.error(request,"Platnost přihlášení vypršela")
+        messages.error(request,MSG.timeOut)
         return ('account:login')
 def invitedUser(request, token):
     email_confirmation = get_object_or_404(EmailConfirmation, token=token)
     sender=token.split("=>")[0]
     user= User.objects.get(username=sender)
-    account= getUsersAccount(request)
+    account= getAccountByUser(user)
     #kontrola expirace
     time_difference = timezone.now() - email_confirmation.created_at
-    if time_difference.total_seconds() > 600:  # 600 seconds = 10 minutes
+    if time_difference.total_seconds() > 1800:  # 600 seconds = 10 minutes=>1800s=30min
         # Link has expired, delete the instance and raise Http404
         email_confirmation.delete()
-        raise Http404("Životnost odkazu vypršela.")
+        raise Http404(MSG.linkExpired)
     email = email_confirmation.email
     #dokončení registrace
     if request.method == 'POST':
@@ -241,15 +305,22 @@ def invitedUser(request, token):
                 usr=User.objects.create_user(username=email, password=pass1)
                 usr.save()
                 account.users.add(usr)
-                messages.success(request, 'Účet byl úspěšně vytvořen. Nyní se prosím přihlaš.')
+                messages.success(request, MSG.addNewUserSuccess)
                 email_confirmation.delete()  # Remove the email confirmation record
                 return redirect('account:login')  # Redirect to login page or wherever you want
+            else:
+                messages.error(request,MSG.addNewUserPassFail)
+        else:
+            messages.error(request,MSG.newMemberValidFail(form.errors.items()))
     else:
         form = SetPasswordForm()
 
     return render(request, 'tags/mains/invitedUserPassword.html', {'form': form, 'email': email})
 # Logging
 def userIn(request):
+    if request.user.is_authenticated and not has_account(request.user):
+                messages.success(request,MSG.regStep1Success)
+                return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
     if isUserLogged(request):
         account = getUsersAccount(request)
         dic={
@@ -258,25 +329,31 @@ def userIn(request):
             "lastlog":request.user.last_login,
         }    
         return render(request,"tags/mains/welcomeUserScreen.html",dic)
-    messages.success(request,"Přihlášení vypršelo. Přihlas se znovu.")
+    messages.success(request,MSG.timeOut)
     return render(request,"index.html")
 def signIn(request):
     if isUserLogged(request):
         return redirect("account:logged")
+    if request.user.is_authenticated and not has_account(request.user):
+                messages.success(request,MSG.regStep1Success)
+                return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
     if request.method=="POST":
         uname = request.POST.get("mail")
         passwd = request.POST.get("pass")
         user = authenticate(username=uname,password=passwd)
         if user is not None:
             login(request,user)
+            if request.user.is_authenticated and not has_account(request.user):
+                messages.success(request,MSG.regStep1Success)
+                return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
             return redirect("account:logged")
         else:
-            messages.error(request,"Špatná emailová adresa nebo heslo")
+            messages.error(request,MSG.loginFail)
             return redirect("account:login")
     return render(request, "index.html")
 def sign_out(request):
     logout(request)
-    messages.success(request,"Uživatel byl úspěšně odlhlášen")
+    messages.success(request,MSG.logOut)
     return signIn(request)
 # account data
 def userData(request):
@@ -314,8 +391,57 @@ def userData(request):
         if members:
             dic["members"]=members
         return render(request,"tags/mains/profile.html",dic)
-    messages.success(request,"Přihlášení vypršelo. Přihlas se znovu.")
+    messages.error(request,MSG.timeOut)
     return redirect("account:login")
+def changeData(request):
+    if isUserLogged(request):
+        account = getUsersAccount(request)
+        if request.method == 'POST':
+            form = changeDataForm(request.POST)
+            if form.is_valid():
+                state1 = form.cleaned_data["state1"]
+                state2=form.cleaned_data["state2"]
+                account.mobile2 = form.cleaned_data['mobile2']
+                account.addres1=form.cleaned_data['addres1']
+                account.addres2=form.cleaned_data['addres2']
+                account.psc1=form.cleaned_data['psc1']
+                account.psc2=form.cleaned_data['psc2']
+               
+                
+                if state1 !="Česko":
+                    tmp=form.cleaned_data['city1']+"("+state1+")"
+                    account.city1=tmp
+                else:
+                    account.city1=form.cleaned_data['city1']
+                if state2 !="Česko":
+                    tmp=form.cleaned_data['city2']+"("+state2+")"
+                    account.city2=tmp
+                else:
+                    account.city2=form.cleaned_data['city2']
+                account.city2=form.cleaned_data['city2']
+                account.mobile1
+                account.save()
+                messages.success(request,MSG.dataChangeSuccess)
+                return redirect("account:profile")
+            else:
+                messages.error(request,MSG.newMemberValidFail(form.errors.items()))
+        form = changeDataForm()
+        form.fields['mobile1'].initial=account.mobile1
+        form.fields['mobile2'].initial=account.mobile2
+        form.fields['city1'].initial=account.city1
+        form.fields['city2'].initial=account.city2
+        form.fields['psc1'].initial=account.psc1
+        form.fields['psc2'].initial=account.psc2
+        form.fields['addres1'].initial=account.addres1
+        form.fields['addres2'].initial=account.addres2
+        dic={
+        "role": account.position,#0=user;1=leader;2=econom;3=admin
+        "form": form,
+    }
+        return render(request,"tags/mains/accountDataChange.html",dic)   
+    else:
+        messages.error(request,MSG.timeOut)
+        return redirect("account:login")
 def nothingToShow(request):
     return render(request,"blindPath.html")
 # def tester(request):
