@@ -5,6 +5,9 @@ from Litomici_memeber_system import settings as STS
 
 app_name = 'account'
 urlpatterns = [
+    #administration
+    path("showMembers&Accounts",views.showMembers, name="showMembers"), # type: ignore
+    path("memberDetail/<int:event_id>",views.memberDetail,name="memberDetail"), # type: ignore
     #sending an email
     path("sendMsg",views.sendMessage,name="sendMSG"),#simple message from user
     path("AddNewUser",views.addUserToAccount,name="addNewUser"),#adding new user to account # type: ignore
@@ -15,7 +18,6 @@ urlpatterns = [
     path("removeMember",views.removeMember,name="removeMemeber"),
     path("addMember",views.add_member_to_account,name="addMember"),
     path("changeData", views.changeData, name="changeData"),
-    path("showMembers&Accounts",views.showMembers, name="showMembers"), # type: ignore
     #creating new entity
     path("register",views.signUp, name="signUp"),
     path('newAccount',views.NewAccount, name='newAccount'),

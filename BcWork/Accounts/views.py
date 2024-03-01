@@ -1,6 +1,6 @@
 from email import message
 from django.utils import timezone
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from Litomici_memeber_system.settings import EMAIL_HOST_USER
 from .forms import EmailForm
 from django.shortcuts import render
@@ -97,18 +97,28 @@ def showMembers(request):
         else:
             messages.error(request,MSG.timeOut)
         return redirect("account:login")
-
+def memberDetail(request,member_id):
+    if isUserLoggedWithPermission(request,1):
+        print(member_id)
+        return HttpResponse()
+    else:
+        if isUserLogged(request):
+            messages.error(request, MSG.permDenied)
+        else:
+            messages.error(request,MSG.timeOut)
+        return userIn(request)
+    return
 def removeMember(request):
     if isUserLogged(request):
         account = getUsersAccount(request)
-        membersInAccount = account.member.all()
+        membersInAccount = account.members.all()
 
         if request.method == 'POST':
             selected_member_id = request.POST.get('member_id')
             if selected_member_id:
                 selected_member = member.objects.get(pk=selected_member_id)
                 if selected_member.ATOM_id == (request.POST.get("Atom")):
-                    account.member.remove(selected_member)
+                    account.members.remove(selected_member)
                     account.save()
                     messages.success(request,MSG.memberRemovedSuccess)
                     return redirect('account:profile')  # Redirect to the member list view or another appropriate view
@@ -134,7 +144,7 @@ def add_member_to_account(request):
  # Get the currently logged-in account
         account = getUsersAccount(request)
     # Get members associated with the current account
-        members_in_account = account.member.all()
+        members_in_account = account.members.all()
     # Get all members and find those not in the current account
         all_members = member.objects.all()
         aviable_members = all_members.exclude(pk__in=members_in_account)
@@ -147,7 +157,7 @@ def add_member_to_account(request):
                 print(selected_member.birthday)
                 if selected_member.birthday.__str__() == born_date:
                     print("Match")
-                    account.member.add(selected_member)
+                    account.members.add(selected_member)
                     account.save()
                     messages.success(request,MSG.addMemberSuccess)
                     return redirect('account:profile')  # Redirect to the member list view or another appropriate view
@@ -174,7 +184,7 @@ def newMember(request):
             print(form.errors.as_text())
             if form.is_valid():
                 newMember=form.save()
-                request.user.account.member.add(newMember)
+                request.user.account.members.add(newMember)
                 if not membersAtomCheck():
                     account = getUsersAccount(request)
                     account.wallet+=(-1200)
@@ -388,7 +398,7 @@ def userData(request):
             dic["addr2"]= account.addres2 + ", "+account.city2 + " " +account.psc2,
         if account.mobile2 is not None:
             dic["mobile2"]=add_spaces(account.mobile2)
-        members=account.member.all
+        members=account.members.all()
         if members:
             dic["members"]=members
         return render(request,"tags/mains/profile.html",dic)

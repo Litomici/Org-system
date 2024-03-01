@@ -281,13 +281,11 @@ def eventActionAttendace2Event(request, event_id):
         else:
             messages.error(request,MSG.timeOut)
         return HttpResponseRedirect(reverse('account:logged'))
-
-
 def listAll(request,event_id=None):
     if isUserLogged(request):
         if request.method=="POST" and event_id:
             event = get_object_or_404(Event, id=event_id)
-            for member in getUsersAccount(request).member.all():
+            for member in getUsersAccount(request).members.all():
                 checkbox_id = f'mem{member.ATOM_id}'
                 if checkbox_id in request.POST:
                     tmp=request.POST[checkbox_id]
@@ -308,7 +306,7 @@ def listAll(request,event_id=None):
         dic={
             "events": sorted_events,
             "role": getUsersAccount(request).position,
-            "accountMembers":getUsersAccount(request).member,
+            "accountMembers":getUsersAccount(request).members,
             }
         return render(request,"tags/mains/listAllEvents.html",dic)
     else:
@@ -340,10 +338,10 @@ def details(request, event_id):
         dic={
             "role":getUsersAccount(request).position,
             "event":event,
-            "accountMembers":getUsersAccount(request).member,
+            "accountMembers":getUsersAccount(request).members,
         }
         if request.method == 'POST':
-            for member in getUsersAccount(request).member.all():
+            for member in getUsersAccount(request).members.all():
                 checkbox_id = f'mem{member.ATOM_id}'
                 if checkbox_id in request.POST:
                     tmp=request.POST[checkbox_id]
@@ -362,7 +360,7 @@ def details(request, event_id):
             dic={
             "role":getUsersAccount(request).position,
             "event":event,
-            "accountMembers":getUsersAccount(request).member,
+            "accountMembers":getUsersAccount(request).members,
         }
             return render(request,"tags/mains/listEvent.html",dic)
         # Render the template with the event data
@@ -377,14 +375,14 @@ def campReg(request,event_id):
         dic={
             "role":acc.position,
             "event":event,
-            "accountMembers":acc.member,
+            "accountMembers":acc.members,
             "mails":acc.users.all(),
             
         }
         if request.method == 'POST':
             signIn=False
             signOut=False
-            for member in getUsersAccount(request).member.all():
+            for member in getUsersAccount(request).members.all():
                 checkbox_id = f'mem{member.ATOM_id}'
                 if checkbox_id in request.POST:
                     tmp=request.POST[checkbox_id]
@@ -415,7 +413,7 @@ def campReg(request,event_id):
             dic={
             "role":getUsersAccount(request).position,
             "event":event,
-            "accountMembers":getUsersAccount(request).member,
+            "accountMembers":getUsersAccount(request).members,
             "mails":acc.users.all(),
         }
         return render(request,"tags/mains/campRegistration.html",dic)  

@@ -1,3 +1,4 @@
+from os import name
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
@@ -18,25 +19,23 @@ class member(models.Model):
             return self.jmeno +" "+ self.surname
 
 class Account(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)#pro prihlaseni
-    users = models.ManyToManyField(User, related_name='access_users',default=[user]) # Many users can be associated with one account
-    #Kontaktni údaje na Rodice - nutne
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='access_users',default=[user])
     addres1=models.CharField(default="",max_length=255)
     city1=models.CharField(default="",max_length=100)
     psc1=models.CharField(default="",max_length=15)
     mobile1=models.CharField(max_length=13, default="")
-    #kontaktni udaje na 2. rodice nebo jinou poverenou osobu - cislo a mail nutne
     addres2=models.CharField(default="",max_length=255, blank=True)
     city2=models.CharField(default="",max_length=100, blank=True)
     psc2=models.CharField(default="", max_length=15, blank=True)
     mobile2=models.CharField(max_length=13, default="")
-    #dalsi udaje vazane k ucu
     wallet=models.FloatField(default=(0.0))
     position=models.IntegerField(default=0)
-    member=models.ManyToManyField(member, related_name=("members"), blank=True)
+    members=models.ManyToManyField(member, related_name=("members"), blank=True)
     objects = models.Manager()
     def __str__(self):
         return self.user.__str__()
+
 
 class EmailConfirmation(models.Model):
     email = models.EmailField()

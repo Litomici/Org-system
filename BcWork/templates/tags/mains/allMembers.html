@@ -16,7 +16,7 @@
                       <div class="card card-body">
                         <ul class="list-group list-group-flush">
                             {%for m in members%}
-                                <li class="list-group-item"><p>{{m.name}}</p><p>{{m.born}}</p><p>{{m.phone}}</p><p>Více info</p></li>
+                                <li class="list-group-item"><p>{{m.name}}</p><p>{{m.born}}</p><p>{{m.phone}}</p><p><a href="{% url "account:memberDetail" m.id %}">Více info</a></p></li>
                             {% endfor %}
                           </ul>
                       </div>

@@ -22,8 +22,8 @@ class Event(models.Model):
     departure=models.CharField(max_length=100)# místo odjezdu
     arrival=models.CharField(default="Včas upřesníme", max_length=100, blank=True)#místo příjezdu
     notes=models.CharField(default="Dobrou náladu", blank=True,max_length=500)# s sebou a poznámky
-    assigned=models.ManyToManyField(member, related_name='assigners', blank=True)# přihlášení
-    attendance=models.ManyToManyField(member, related_name='attendance', blank=True)# zúčastnění
+    assigned=models.ManyToManyField(member, related_name=("assigned"), blank=True)# přihlášení
+    attendance=models.ManyToManyField(member, related_name=("attendance"), blank=True)# zúčastnění
     price=models.IntegerField(default=0)# cena za jednoho
     capacity=models.IntegerField(default=50,blank=True)#kolik se lidí se může zapsat
     description=models.CharField(blank=True,max_length=500,default=" ",)#bližší popis akce
