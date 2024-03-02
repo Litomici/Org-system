@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wx6^cl3o#*h(cv7ax2f$rt53fasb=jq#6tk@7!5%_pom!&poft'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800
 ALLOWED_HOSTS = ['*']
@@ -93,11 +93,11 @@ WSGI_APPLICATION = 'Litomici_memeber_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-DATABASES['default']=dj_database_url.parse('postgres://litomcampdb_user:eD7SrYIWnZTxn8J4devU7UxbaFeBQrrS@dpg-cngrag8l6cac73ag7qv0-a.frankfurt-postgres.render.com/litomcampdb')
+DATABASES['default']=dj_database_url.parse('postgres://litomcampdb_user:eD7SrYIWnZTxn8J4devU7UxbaFeBQrrS@dpg-cngrag8l6cac73ag7qv0-a.frankfurt-postgres.render.com/litomcampdb') # type: ignore
 
 
 # Password validation

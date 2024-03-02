@@ -111,14 +111,14 @@ def memberDetail(request,member_id):
 def removeMember(request):
     if isUserLogged(request):
         account = getUsersAccount(request)
-        membersInAccount = account.members.all()
+        membersInAccount = account.member.all()
 
         if request.method == 'POST':
             selected_member_id = request.POST.get('member_id')
             if selected_member_id:
                 selected_member = member.objects.get(pk=selected_member_id)
                 if selected_member.ATOM_id == (request.POST.get("Atom")):
-                    account.members.remove(selected_member)
+                    account.member.remove(selected_member)
                     account.save()
                     messages.success(request,MSG.memberRemovedSuccess)
                     return redirect('account:profile')  # Redirect to the member list view or another appropriate view
@@ -144,7 +144,7 @@ def add_member_to_account(request):
  # Get the currently logged-in account
         account = getUsersAccount(request)
     # Get members associated with the current account
-        members_in_account = account.members.all()
+        members_in_account = account.member.all()
     # Get all members and find those not in the current account
         all_members = member.objects.all()
         aviable_members = all_members.exclude(pk__in=members_in_account)
@@ -157,7 +157,7 @@ def add_member_to_account(request):
                 print(selected_member.birthday)
                 if selected_member.birthday.__str__() == born_date:
                     print("Match")
-                    account.members.add(selected_member)
+                    account.member.add(selected_member)
                     account.save()
                     messages.success(request,MSG.addMemberSuccess)
                     return redirect('account:profile')  # Redirect to the member list view or another appropriate view
@@ -184,7 +184,7 @@ def newMember(request):
             print(form.errors.as_text())
             if form.is_valid():
                 newMember=form.save()
-                request.user.account.members.add(newMember)
+                request.user.account.member.add(newMember)
                 if not membersAtomCheck():
                     account = getUsersAccount(request)
                     account.wallet+=(-1200)
@@ -398,9 +398,13 @@ def userData(request):
             dic["addr2"]= account.addres2 + ", "+account.city2 + " " +account.psc2,
         if account.mobile2 is not None:
             dic["mobile2"]=add_spaces(account.mobile2)
-        members=account.members.all()
+        members=account.member.all()
+        for m in members:
+            print(m.jmeno)
         if members:
             dic["members"]=members
+        else:
+            dic["members"]=[]
         return render(request,"tags/mains/profile.html",dic)
     messages.error(request,MSG.timeOut)
     return redirect("account:login")

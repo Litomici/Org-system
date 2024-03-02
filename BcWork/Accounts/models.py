@@ -1,3 +1,4 @@
+from email.policy import default
 from os import name
 from django.db import models
 from django.utils.timezone import now
@@ -31,7 +32,7 @@ class Account(models.Model):
     mobile2=models.CharField(max_length=13, default="")
     wallet=models.FloatField(default=(0.0))
     position=models.IntegerField(default=0)
-    members=models.ManyToManyField(member, related_name=("members"), blank=True)
+    member=models.ManyToManyField(member, related_name=("member"), blank=True)
     objects = models.Manager()
     def __str__(self):
         return self.user.__str__()
