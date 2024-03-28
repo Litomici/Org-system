@@ -6,34 +6,34 @@ from Litomici_memeber_system import settings as STS
 app_name = 'account'
 urlpatterns = [
     #administration
-    path("ShowMembers&Accounts",views.showMembers, name="showMembers"), # type: ignore
-    path("MemberDetail/<str:member_id>",views.memberDetail,name="memberDetail"), # type: ignore
-    path("Payment",views.seeMoney,name="payment"),
-    path("Economy",views.unpayed_payments,name="economy"),
-    path("BankTransactions",views.bank_transactions,name="bankTransactions"),
-    path("Payed",views.payed_payments,name="payed"),
-    path("Payments",views.payments,name="payments"),
-    path("Notify2pay/<str:account_id>",views.notify2pay,name="notify2pay"),
-    path("AddMoney2pay/<str:account_id>",views.addMoney2pay,name="need2pay"),
-    path("ManualPayment",views.manual_payment,name="manualP"),
+    path("showMembers&Accounts",views.showMembers, name="showMembers"), # type: ignore
+    path("semberDetail/<str:member_id>",views.memberDetail,name="memberDetail"), # type: ignore
+    path("payment",views.seeMoney,name="payment"),
+    path("economy",views.unpayed_payments,name="economy"),
+    path("bankTransactions",views.bank_transactions,name="bankTransactions"),
+    path("payed",views.payed_payments,name="payed"),
+    path("payments",views.payments,name="payments"),
+    path("notify2pay/<str:account_id>",views.notify2pay,name="notify2pay"),
+    path("addMoney2pay/<str:account_id>",views.addMoney2pay,name="need2pay"),
+    path("manualPayment",views.manual_payment,name="manualP"),
     #sending an email
-    path("SendMsg",views.sendMessage,name="sendMSG"),#simple message from user
-    path("AddNewUser",views.addUserToAccount,name="addNewUser"),#adding new user to account # type: ignore
-    path("SetPassword/<str:token>/",views.invitedUser,name="setPasswd"),
+    path("sendMsg",views.sendMessage,name="sendMSG"),#simple message from user
+    path("addNewUser",views.addUserToAccount,name="addNewUser"),#adding new user to account # type: ignore
+    path("setPassword/<str:token>/",views.invitedUser,name="setPasswd"),
     #account operations
-    path("Account",views.userIn, name="logged"),
-    path("ProfileInfo",views.userData, name="profile"),
-    path("RemoveMember",views.removeMember,name="removeMemeber"),
-    path("AddMember",views.add_member_to_account,name="addMember"),
-    path("ChangeData", views.changeData, name="changeData"),
+    path("account",views.userIn, name="logged"),
+    path("profileInfo",views.userData, name="profile"),
+    path("removeMember",views.removeMember,name="removeMemeber"),
+    path("addMember",views.add_member_to_account,name="addMember"),
+    path("changeData", views.changeData, name="changeData"),
     #creating new entity
-    path("Register",views.signUp, name="signUp"),
-    path('NewAccount',views.NewAccount, name='newAccount'),
-    path("AddEvent",views.userData, name="addEvent"),
-    path("CreateMemeber",views.newMember,name="newMember"),
+    path("register",views.signUp, name="signUp"),
+    path('newAccount',views.NewAccount, name='newAccount'),
+    path("addEvent",views.userData, name="addEvent"),
+    path("createMemeber",views.newMember,name="newMember"),
     #loging
-    path("Login",views.signIn, name="login"),
-    path("Logout",LogoutView.as_view(next_page=STS.LOGOUT_REDIRECT_URL), name="logout"),
+    path("login",views.signIn, name="login"),
+    path("logout",LogoutView.as_view(next_page=STS.LOGOUT_REDIRECT_URL), name="logout"),
     #password reset 
     path('password_reset/', PasswordResetView.as_view(), name='password_reset'),
     path('password_reset_sent/',PasswordResetDoneView.as_view(), name='password_reset_done'),

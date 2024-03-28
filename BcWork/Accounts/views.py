@@ -263,7 +263,7 @@ def bank_transactions(request):
                         if other_account_number != "":#pokud je příchozí
                             confirmed_payment = payment.objects.filter(transaction_number=transaction.get("id"))
                             if not confirmed_payment.exists():# pokud není už v systému
-                                print(f"platba s var symbolem {transaction.get("var-sym")}neni v systemu")
+                                print(f"platba s var symbolem {transaction.get('var-sym')}neni v systemu")
                                 unconfirmed_payments = payment.objects.filter(var_symbol=transaction.get("var-sym"), confirmed=False)
                                 er=0
                                 if(not unconfirmed_payments):
