@@ -459,3 +459,9 @@ display: none;
     align-content: center;
     align-items: center;
 }
+.pay{
+    min-width: 70%%;
+}
+.qr{
+    min-width: 25%;
+}

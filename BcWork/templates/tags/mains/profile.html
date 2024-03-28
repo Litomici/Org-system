@@ -11,7 +11,14 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item profileInformation">{{mail}}
                     </li> 
-                    <li class="list-group-item profileInformation">Peněženka: {{wallet}}</li>
+                    <li class="list-group-item profileInformation">Peněženka: 
+                      {%if wallet < 0%}
+                        <span style="color:red">{{wallet}}</span>&nbsp
+                        <a href="{% url "account:payment" %}"><i class="fa-regular fa-credit-card"></i></a>
+                      {%else%}
+                      {{wallet}} <a href="{% url "account:payment" %}"><i class="fa-regular fa-credit-card"></i></a>
+                      {%endif%}
+                    </li>
                     <li class="list-group-item profileInformation">{{addr1}} </li>
                     <li class="list-group-item profileInformation">{{mobile1}}</li>
                   </ul>

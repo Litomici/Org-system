@@ -6,7 +6,7 @@
     </div>
     
     <div class="login">
-    <form action="/login" method="post" class="logging">
+    <form action="/Login" method="post" class="logging">
         {% csrf_token %}
         <h1>Přihlaste se</h1>
         <label for="mail">Emailová adresa:</label>
@@ -14,7 +14,7 @@
         <label for="mail">Heslo: </label>
         <input type="password" class="data" name="pass" id="pass" placeholder="password" required><br>
         {% for message in messages %}
-        <p><b>Přihlášení se nepovedlo: </b>{{message}}</p>
+        <p><b>Chyba: </b>{{message}}</p>
         {% endfor %}
         <input type="submit" class="submit btn-primary" value="Přihlásit"><br>
         <div class="log-questions">

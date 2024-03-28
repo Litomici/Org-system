@@ -28,12 +28,10 @@ def eventActions(request):
         return HttpResponseRedirect(reverse('account:logged'))  
 def eventActionEdit(request):
     if isUserLoggedWithPermission(request,1):
-         
-        if request.method == "POST":
+        if request.method == "POST":#přišel post
             form = EventEditForm(request.POST)
             request.POST.get('eventId')
-            
-            if form.is_valid():
+            if form.is_valid():#formulář je ok
                 tmp = get_object_or_404(Event, id=int(request.POST.get('eventId')))
                 for field_name in [field.name for field in Event._meta.fields]:
                         form_field_name = field_name
@@ -50,6 +48,13 @@ def eventActionEdit(request):
                             if getattr(tmp, field_name) != form_value:
                                 setattr(tmp, field_name, form_value)
                 tmp.save()
+                #odeslat upozornění na změnu
+                email = EmailMessage(
+                subject=f"Pozor změna!",
+                body=f"Zdravíme všechny litomíky a příznice,\n\n rádi bychom vás upozornili, že došlo k důležité změně v akci {tmp.name} ({tmp.meeting.strftime('%d.%m.%Y')}). Přihlaste se a podívejte se, co se změnilo ať nejste později překvapení.\n \n Přejeme pěkný den a těšíme se na vás!\n Vaši Litomíci",
+                from_email="turistaklitomici@gmail.com",  # You can set a default email in your settings.py
+                to=getMailForAllAsigned(tmp)       )        
+                email.send(fail_silently=False)
                 form =EventEditForm()
                 for field_name, field in form.fields.items():
                     if field_name != 'csrfmiddlewaretoken':
@@ -207,7 +212,7 @@ def cancelingOfEvent(request,event_id):
                     recipients = getMailsFromEvent(event)
                     # Zpráva, kterou chcete odeslat
                     subject = f"Akce {event.name} se ruší"
-                    message = f"Litomíci zdraví litomíky,\n Je nám to moc líto, ale musíme zrušit {event.name}({event.meeting.date}) z důvodu {reason}. Doufáme, že s námi zůstanete i nadále.\n Těšíme se na berkou shledanou.\n vaši Litomíci"
+                    message = f"Litomíci zdraví litomíky,\n\n Je nám to moc líto, ale musíme zrušit {event.name} ({event.meeting.date}) z důvodu {reason}. Doufáme, že s námi zůstanete i nadále.\n\n Těšíme se na brzkou shledanou.\n vaši Litomíci"
                     sender_email = EMAIL_HOST# E-mail odesílatele
                     # Odeslání e-mailu
                     send_mail(subject, message, sender_email, recipients)
@@ -322,7 +327,7 @@ def listCamps(request):
         # Nastavení času na 1:00 AM
         time_limit = today.replace(hour=1, minute=0, second=0, microsecond=0)
         print(time_limit)
-        camptype_events =  Event.objects.filter(event_type='tabor_vyprava', meeting=time_limit)
+        camptype_events =  Event.objects.filter(event_type='tabor_vyprava', meeting__gte=time_limit).all()
     # Get members associated with the current account
         dic={
             'camps': camptype_events,
@@ -375,14 +380,15 @@ def campReg(request,event_id):
         dic={
             "role":acc.position,
             "event":event,
-            "accountMembers":acc.member,
+            "accountMembers":acc.member.all(),
             "mails":acc.users.all(),
             
         }
         if request.method == 'POST':
             signIn=False
             signOut=False
-            for member in getUsersAccount(request).member.all():
+            acc=getUsersAccount(request)
+            for member in acc.member.all():
                 checkbox_id = f'mem{member.ATOM_id}'
                 if checkbox_id in request.POST:
                     tmp=request.POST[checkbox_id]
@@ -392,14 +398,21 @@ def campReg(request,event_id):
                     if tmp == 'on' and member not in event.assigned.all():
                         event.assigned.add(member)
                         signIn=True
+                        acc.wallet-=event.price
+                        acc.save()
+                        
 
                     elif tmp !="on"and member in event.assigned.all():
                         event.assigned.remove(member)
                         signOut=True
+                        acc.wallet+=event.price
+                        acc.save()
                 else: 
                     if member in event.assigned.all():
                         event.assigned.remove(member)
                         signOut=True
+                        acc.wallet-=event.price
+                        acc.save()
 
             # Save the changes to the database
             subject = 'camp reg'
@@ -413,7 +426,7 @@ def campReg(request,event_id):
             dic={
             "role":getUsersAccount(request).position,
             "event":event,
-            "accountMembers":getUsersAccount(request).member,
+            "accountMembers":acc.member.all(),
             "mails":acc.users.all(),
         }
         return render(request,"tags/mains/campRegistration.html",dic)  

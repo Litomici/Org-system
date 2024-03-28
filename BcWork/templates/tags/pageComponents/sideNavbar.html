@@ -9,7 +9,7 @@
     {% endif %}
     {% if role >= 2 %}
     <!-- for econom -->
-        <li>Platby</li>
+    <a href="{% url "account:economy" %}"> <li>Platby</li></a>
     {% endif %}
     {%if  role >= 3 %}
     <!-- for Admin/heads -->

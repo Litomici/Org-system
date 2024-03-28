@@ -1,5 +1,7 @@
 from email.policy import default
 from os import name
+from re import T
+from typing import Counter
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
@@ -53,3 +55,18 @@ class EmailConfirmation(models.Model):
         message = render_to_string('confirmation_email.txt', {'token': self.token})
         from_email = 'turistakLitomici@gmail.com'
         send_mail(subject, message, from_email, [self.email])
+        
+class payment(models.Model):
+    payment_id = models.AutoField(primary_key=True)
+    amount = models.IntegerField()
+    confirmed = models.BooleanField(default=False)
+    creation_date = models.DateField(auto_now_add=True)
+    payed_date = models.DateField(null=True, blank=True)
+    account = models.ForeignKey('Account', on_delete=models.SET_NULL, null=True)
+    payment_from = models.CharField(max_length=35,blank=True, default="neznámý účet")
+    transaction_number = models.CharField(max_length=30,null=True,blank=True)
+    var_symbol=models.CharField(max_length=10,blank=True,null=True)
+    payed_in_cash=models.BooleanField(default=True)
+    objects = models.Manager()
+    def __str__(self):
+        return f"Platba {self.amount} od {self.account}"

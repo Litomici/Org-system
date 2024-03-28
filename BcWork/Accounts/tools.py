@@ -1,6 +1,6 @@
 from .models import *
 import csv
-from datetime import datetime
+from datetime import datetime,timedelta
 from django.db.models import Q
 from Events.models import Event
 from django.contrib.auth.models import User
@@ -227,3 +227,41 @@ def notSignedMembers(event):
 def give_accounts(members):
     accounts = Account.objects.filter(member__in=members).distinct()
     return accounts
+def thisWeekEvents():
+    # Získání dnešního data
+    today = datetime.now().date()
+    # Vypočítání data za 7 dní
+    seven_days_from_now = today + timedelta(days=7)
+    # Filtrování událostí, které mají meeting za 7 a méně dní a nejsou starší než dnešní datum
+    upcoming_events = Event.objects.filter(meeting__lte=seven_days_from_now, meeting__gte=today)
+    
+    return upcoming_events
+def parse_member_string(member_str):
+    parts = member_str.split("-")  # Rozdělení řetězce podle pomlček
+    name = parts[0]  # Jméno je první část
+    lastName = parts[1]  # Příjmení je druhá část
+    year = int(parts[2])  # Rok je třetí část (převedeno na celé číslo)
+    month = int(parts[3])  # Měsíc je čtvrtá část (převedeno na celé číslo)
+    day = int(parts[4])  # Den je pátá část (převedeno na celé číslo)
+    born = datetime(year, month, day).date()  # Vytvoření objektu datetime.date z rok-měsíc-den
+
+    return {'name': name, 'lastName': lastName, 'born': born}
+
+def process_string(input_string):
+    if len(input_string) < 7 or len(input_string) > 13:
+        raise ValueError("Input string must be between 7 and 13 characters long.")
+    reversed_first_7_chars = input_string[-7:][::-1]  # Odzadu prvních 7 znaků
+    remaining_chars = '024' * (10 - len(reversed_first_7_chars))  # Doplnění zbylých znaků čísly "024"
+    result_string = reversed_first_7_chars + remaining_chars
+    return result_string[:10]  # Oříznutí výsledného řetězce na délku 10
+def getMailForAllAsigned(event):
+    mails=set()
+    for m in event.assigned.all():
+        acc=Account.objects.filter(member=m).first()
+        for u in acc.users.all():
+            mails.add(u.username)
+    return list(mails)
+
+
+
+

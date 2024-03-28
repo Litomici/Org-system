@@ -71,7 +71,7 @@
                                 <form method="post" action="">
                                   {% csrf_token %}
                                     <ul class="signing-form">
-                                        {% for member in accountMembers.all %}
+                                        {% for member in accountMembers %}
                                         <li>
                                             <label class="container" for="mem{{member.ATOM_id}}"> {{ member.jmeno }} {{ member.surname }} 
                                             {% if member in event.assigned.all %}

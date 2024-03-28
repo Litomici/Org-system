@@ -59,5 +59,9 @@
         <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
       {{ form.description }}
     </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="customCheck1" name="notify">
+      <label class="custom-control-label" for="customCheck1">Poslat zapsaným účastníkům upozornění o změnách</label>
+    </div>
     <button type="submit" class="btn btn-primary">Uložit změny</button>
   </form>

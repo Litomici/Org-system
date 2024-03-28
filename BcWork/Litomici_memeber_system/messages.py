@@ -26,6 +26,8 @@ dataChangeSuccess="Data byla úspěšně změněna."
 eventEditSuccess="Změny události byly uloženy"
 eventCreateSuccess="Aktivita byla úspěšně vytvořena přidána do rozvrhu"
 eventCreateFail="Ups! Z technických problémů nebylo možné vytvořit událost. Zkuste to znovu nebo kontaktujte správce"
+fileNotFound="Soubor je poškozený nebo došlo k chybě při jeho nahrávání."
+incorectFileFormat="Nahraný soubor není ve správné formátu. Zkontroljte, že se jedná o .XML a soubor obsahuje sekci <transactions>"
 def addUserfail(email):
     return f"Z technických důvodé nebylo možné kontaktovat adresu {email}. Zkuste to prosím znovu. Narážíte-li na problém opakovaně kontaktujte správce."
 def addUserSuccess(email):
@@ -46,5 +48,5 @@ def contactUsFailValid(errors):
 def ActionFormsInvalid(errors):
     msg="Ups! Špatně jste uvedli některé informace:"
     for e in errors:
-        msg+=e
+        msg+=" {e[0]} {e[1]}\n"
     return msg

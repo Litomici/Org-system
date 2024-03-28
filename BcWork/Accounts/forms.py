@@ -2,7 +2,7 @@ from django.forms import DateTimeInput, ModelForm
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Account,member
+from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -154,3 +154,9 @@ class changeDataForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=False
     )
+class UploadFileForm(forms.Form):
+    file = forms.FileField(label='Vyberte soubor',widget=forms.FileInput(attrs={'class': 'form-control','id':"fileInput"}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Nastavíme enctype na multipart/form-data
+        self.fields['file'].widget.attrs.update({'enctype': 'multipart/form-data'})
