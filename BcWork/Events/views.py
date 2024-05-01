@@ -1,4 +1,5 @@
 from math import e
+from Accounts.views import sendNotification
 from Litomici_memeber_system.settings import EMAIL_HOST
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,7 +11,7 @@ from Accounts.tools import *
 from.forms import *
 from django.contrib import messages
 from django.db.models import F
-from datetime import timedelta
+from datetime import timedelta,datetime
 from django.utils import timezone
 from Litomici_memeber_system import messages as MSG
 def eventActions(request):
@@ -344,6 +345,7 @@ def details(request, event_id):
             "role":getUsersAccount(request).position,
             "event":event,
             "accountMembers":getUsersAccount(request).member,
+            "today": event.ending < datetime.now(timezone.utc),
         }
         if request.method == 'POST':
             for member in getUsersAccount(request).member.all():
@@ -360,13 +362,14 @@ def details(request, event_id):
                     if member in event.assigned.all():
                         event.assigned.remove(member)
             # Save the changes to the database
-            event.save()
+            event.save() 
             messages.success(request,MSG.eventEditSuccess)
             dic={
             "role":getUsersAccount(request).position,
             "event":event,
             "accountMembers":getUsersAccount(request).member,
-        }
+            "today": datetime.now()
+            }
             return render(request,"tags/mains/listEvent.html",dic)
         # Render the template with the event data
         return render(request,"tags/mains/listEvent.html",dic)

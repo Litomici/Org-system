@@ -14,12 +14,12 @@
         <label for="mail">Heslo: </label>
         <input type="password" class="data" name="pass" id="pass" placeholder="password" required><br>
         {% for message in messages %}
-        <p><b>Chyba: </b>{{message}}</p>
+        <p>{{message}}</p>
         {% endfor %}
         <input type="submit" class="submit btn-primary" value="Přihlásit"><br>
         <div class="log-questions">
-            <p>Nemáš účet?<a href="/register">Zaregistruj se </a></p>
-            <br> <p> Zapomněl jsi heslo? <a href="password_reset">Zapomenuté heslo</a></p>
+            <p>Nemáš účet?<a href="{% url "account:signUp" %}">Zaregistruj se </a></p>
+            <br> <p> Zapomněl jsi heslo? <a href="{% url "account:password_reset" %}">Zapomenuté heslo</a></p>
         </div>
     </form>
     </div>

@@ -35,9 +35,18 @@
                             <a class="btn btn-primary mrg" data-toggle="collapse" href="#signed" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Zobrazit přihlášené
                             </a>
+                            {% if today %}
+                            <button class="btn btn-primary mrg" type="button" data-toggle="collapse" data-target="#attend" aria-expanded="false" aria-controls="collapseExample">
+                                Zobrazit všechny přítomné
+                            </button>
+                            
+                            {% comment %} {% else %} {% endcomment %}
                             <button class="btn btn-primary mrg" type="button" data-toggle="collapse" data-target="#members2sign" aria-expanded="false" aria-controls="collapseExample">
                                 Přihlásit/Odhlásit členy
                             </button>
+                            {% endif %}
+                            {% comment %}  {% endcomment %}
+                            
                         </p>
                         <div class="collapse" id="signed">
                             <div class="card card-body">        
@@ -87,6 +96,17 @@
                                     </ul>
                                     <button type="submit" class="btn btn-primary" >Uložit změny</a>
                                 </form>
+                            </div>
+                        </div>
+                        <div class="collapse" id="attend">
+                            <div class="card card-body">
+                                <ul class="signing-form">
+                                    {% for member in event.attendance.all %}
+                                    <li>
+                                    {{ member.jmeno }} {{ member.surname }} 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </div>
                     </div>

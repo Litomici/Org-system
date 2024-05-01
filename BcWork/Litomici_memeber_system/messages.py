@@ -2,7 +2,7 @@
     Tento soubor obsahuje chybové hlášky a zprávy o dokončení
 """
 from venv import create
-
+import re
 permDenied="Pokusili jste se navšívit stránku, pro kterou nemáte oprávnění. Museli jsme vás převést jinam"
 timeOut="je nám líto, ale platnost vašeho přihlášení vypršela. Přihlaste se prosím znovu."
 loginFail="Heslo a email se neschodují"
@@ -17,6 +17,7 @@ memberRemovedFail="Zadali jste nesprávný osobní kód."
 memberRemovedNoSelect="Odebrání selhalo! Člen je buď již odstraněný nebo byl adminem přidělen k tomuto účtu."
 addMemberSuccess="Člen byl úspěšně přidák k vašemu účtu."
 addMemberFail="Je nám líto, ale podle data narození asi myslíte jiného člena."
+newMemberJoined="Vypadá to, že vámi vytvořený člen není na seznamu členů se zaplaceným členským příspěvkem. Odečetli jsme vám proto cenu členství z virtuální peněženky. \n Pokud víte, že jste platili napište nám a společně to vyřešíme."
 createMemberSuccess="Člen byl úspěšně vytvořen a přidán k vašemu účtu."
 linkExpired="Tento odkaz již není platný. Překročil životnost 30 min nebo byl již využit."
 addNewUserSuccess= "Váš účet byl úspěšně vytvořen a přidán. Prosím nyní se řádně přihlašte."
@@ -36,17 +37,25 @@ def addUserAllrdyUsed(email):
     return f"Uživatel s emailem {email} již existuje a má svůj vlastní účet. Zkontrolujte adresu zkuste to znovu.Nebojte se nás v případě potřeby kontaktovat."
 
 def newMemberValidFail(errors):
-    msg="Chybně zadané informace:\n"
+    msg=f"Chybně zadané informace:\n"
+    regex_pattern = r'<li>(.*?)</li>'
+    # Hledání shody s regulárním výrazem v HTML vstupu
     for e in errors:
-        msg+=e
+        tmp=f"{e[1]}"
+            # Pokud je chyba objekt ValidationError, zpracujte ji pomocí regulárního výrazu
+        match = re.search(regex_pattern, tmp)
+        if match:
+            msg += f"{match.group(1)}\n"
+        else:
+            msg+=f"{e[1]}"
     return msg
 def contactUsFailValid(errors):
     msg="Systém zaznamenal následující chyby:\n"
     for e in errors:
-        msg+=e
+        msg+=f" {e[0]} {e[1]}\n"
     return msg
 def ActionFormsInvalid(errors):
     msg="Ups! Špatně jste uvedli některé informace:"
     for e in errors:
-        msg+=" {e[0]} {e[1]}\n"
+        msg+=f" {e[0]} {e[1]}\n"
     return msg

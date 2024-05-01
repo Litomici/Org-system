@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wx6^cl3o#*h(cv7ax2f$rt53fasb=jq#6tk@7!5%_pom!&poft'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800
 ALLOWED_HOSTS = ['*']
@@ -39,6 +39,7 @@ EMAIL_USE_TLS = True  # Use TLS for secure connection
 #EMAIL_USE_SSL = False  # Use SSL for secure connection (if port is set to 465)
 EMAIL_HOST_USER = 'turistaklitomici@gmail.com'
 EMAIL_HOST_PASSWORD = 'cpep iyrd jgfe pzmz'
+DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
   # Use the generated app password if you set one
 # DEFAULT_FROM_EMAIL = 'turistaklitomici@gmail.com'
 # SERVER_EMAIL = 'turistaklitomici@gmail.com'
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 MIDDLEWARE = [

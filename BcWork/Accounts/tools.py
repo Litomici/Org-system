@@ -246,7 +246,26 @@ def parse_member_string(member_str):
     born = datetime(year, month, day).date()  # Vytvoření objektu datetime.date z rok-měsíc-den
 
     return {'name': name, 'lastName': lastName, 'born': born}
-
+def inform_all():
+  # Získání všech účtů, které mají uživatele
+    all_accounts = Account.objects.all()
+    # Inicializace prázdného seznamu pro e-maily
+    all_emails=[]
+    # Procházení všech účtů
+    for account in all_accounts:
+        for user in account.users.all():
+            if not (user.username in all_emails):
+                all_emails.append(user.username)
+    return all_emails
+def infrom_asigned(event):
+    mails = []
+    for m in event.assigned.all():
+        acc=Account.objects.filter(member=m).first()
+        if acc is not None:
+            for user in acc.users.all():
+                    if not (user.username in mails):
+                        mails.append(user.username)
+    return mails 
 def process_string(input_string):
     if len(input_string) < 7 or len(input_string) > 13:
         raise ValueError("Input string must be between 7 and 13 characters long.")

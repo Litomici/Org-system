@@ -28,9 +28,9 @@
                         </div>
                         <div class="back">
                             <h2>{{camp.destination}}</h2>
-                            <p class="description">
+                            <div style="overflow-y:scroll;max-height:60%" class="description">
                             {{camp.description}}
-                            </p>
+                            </div>
                             <div class="data-line">
                                 <div class="data">
                                     <h3>{{camp.price}} Kč</h3><p>Cena</p></div>
@@ -44,7 +44,7 @@
                                 </h3><p>Doprava</p></div>
                             </div>
                             <div class="btn-row">
-                                <a style="width:100%" href="campRegister/{{camp.id}}"><button>Přihlásit se</button></a>
+                                <a style="width:100%" href="{% url "event:campRegister"  camp.id %}"><button>Přihlásit se</button></a>
                             </div>
                         </div>
                     </div>

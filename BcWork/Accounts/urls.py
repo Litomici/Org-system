@@ -17,6 +17,7 @@ urlpatterns = [
     path("addMoney2pay/<str:account_id>",views.addMoney2pay,name="need2pay"),
     path("manualPayment",views.manual_payment,name="manualP"),
     #sending an email
+    path("sendNotification/<int:action_id>/<int:event_id>",views.sendNotification,name="sendEmail"),#type: ignore
     path("sendMsg",views.sendMessage,name="sendMSG"),#simple message from user
     path("addNewUser",views.addUserToAccount,name="addNewUser"),#adding new user to account # type: ignore
     path("setPassword/<str:token>/",views.invitedUser,name="setPasswd"),
@@ -35,10 +36,10 @@ urlpatterns = [
     path("login",views.signIn, name="login"),
     path("logout",LogoutView.as_view(next_page=STS.LOGOUT_REDIRECT_URL), name="logout"),
     #password reset 
-    path('password_reset/', PasswordResetView.as_view(), name='password_reset'),
-    path('password_reset_sent/',PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/',PasswordResetConfirmView.as_view(), name='password_reset_confirm '),
-    path('reset_complete',PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('password_reset/', PasswordResetView.as_view(template_name='registration/resetPass.html',from_email='turistaklitomici@gmail.com', html_email_template_name='registration/password_reset_email.html',email_template_name='registration/password_reset_email.html',success_url="done"), name='password_reset'),
+    path('password_reset/done/', PasswordResetDoneView.as_view(template_name='registration//password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/done/', PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), name='password_reset_complete'),
     #errors
     path("",views.signIn, name="404"),
     #development only 

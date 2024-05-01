@@ -1,7 +1,7 @@
 from django.forms import DateTimeInput, ModelForm
 from django import forms
 from django.core.exceptions import ValidationError
-
+import re
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -15,10 +15,13 @@ def validate_psc_number(value):
     if not set(value).issubset(allowed_chars):
         raise ValidationError("nesprávné znaky v PSC")
 def validate_alpha_characters(value):
-    if not value.isalpha():
-        allowed_chars = set(" -'()")
-        if not set(value).issubset(allowed_chars) :
-            raise ValidationError("Názvy měst mohou obsahovat pouze písmena")
+    regex_pattern = r'^[a-zA-ZěščřžýáíéťďňúůüĚŠČŘŽÝÁÍÉŤĎŇÚŮÜ ,.\-\']+?$'
+
+    # Kontrola řetězce pomocí regulárního výrazu
+    if re.match(regex_pattern, value):
+        print("ok")
+    else:
+        raise ValidationError('Názvy měst mohou obsahovat pouze písmena české abecedy, mezery následující (,),(-),(.)')
 
 
 class NewMemeberForm(ModelForm):
@@ -77,7 +80,7 @@ class UserRegistrationForm(UserCreationForm):
         help_texts = {
             "password1": "Heslo musí být 8 znaků dlouhé. Nesmí obsahovat pouze čísla nebo být seznamu snadno prolomitelných hesel.",
         }
-class EmailForm(forms.Form):
+class ContactForm(forms.Form):
     subject = forms.CharField(max_length=100)
     text = forms.CharField(widget=forms.Textarea)
     
@@ -134,7 +137,7 @@ class changeDataForm(forms.Form):
         )
     city2= forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),
-        validators=[validate_alpha_characters],
+        #validators=[validate_alpha_characters],
         required=False
         )
     psc2= forms.CharField(

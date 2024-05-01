@@ -1,8 +1,9 @@
+from asyncio import events
 from email import message
 from django.utils import timezone
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from Litomici_memeber_system.settings import EMAIL_HOST_USER
-from .forms import EmailForm
+from .forms import ContactForm
 from django.shortcuts import render
 from django.shortcuts import redirect, render,get_object_or_404
 from django.http import HttpResponseRedirect
@@ -14,27 +15,76 @@ from django.core.mail import EmailMessage
 from Litomici_memeber_system import settings
 from Litomici_memeber_system import messages as MSG
 from .models import Account,EmailConfirmation
-from datetime import datetime
+from datetime import datetime,date
 import xml.etree.ElementTree as ET
 from .forms import *
 from .tools import *
 # from Events.forms import EventForm
 # from Events.models import *
 #send message
-def sendNotification():
-    subject=f"Nezapomeňte tento týden na plánované akce!"
-    email = EmailMessage(
-        subject=f"Nezapomeňte tento týden ",
-        body=f"zdravíme litomíky,\n Rádi bychom vám připomněli, že tento týden plánujeme následující akce.",
-        from_email="turistaklitomici@gmail.com",  # You can set a default email in your settings.py
-        to=["sibik@seznam.cz","charouzd.f@seznam.cz"],
-    )
-    attachment_paths=["extraFiles/bezinfekcnost.pdf"]
-    # Attach files
-    for attachment_path in attachment_paths:
-        with open(attachment_path, 'rb') as file:
-            email.attach_file(attachment_path)
-    email.send(fail_silently=False)
+"""
+    sednNotification
+    funkce odešle email s textem podle druhu akce.
+    Seznam akcí:
+        1) Oznámení nové akce - běžné
+        2) Oznámení nové akce -veřejnost
+        3) Oznámení nové akce - novinka
+        4) Oznámení nové akce - Výroční
+        5) Upozornění pro zapsané - aby nezapomněli
+        6) Upozornění pro nezapsané - Poslední možnost
+    
+"""
+def sendNotification(request,action_id,event_id):
+    if isUserLoggedWithPermission(request,2):
+        subject=""
+        msg=""
+        send_to=[]
+        info_about=Event.objects.filter(id=event_id).first()
+        time_date=info_about.meeting.strftime("%d.%m.%Y")
+        time_time=info_about.meeting.strftime("%H:%M")
+        if action_id == 1:
+            subject=f"Nová akce v plánu. Honem se pojď zapsat na {info_about.name}"
+            msg=f"Zdavíme Litomíky a naše příznivce\n\nPrávě jsem přidali novou událost {info_about.name}, která začne v {info_about.meeting}. Doufáme, že se tam setkáme v co největším počtu a pořádně si to spolu užijeme. Zapište prosím, ať víme, kolik nás na akci bude.\n \n Děkujeme a těšíme se na vás!\nVaši Litomíci  "
+            send_to=inform_all()
+        elif action_id == 2:
+            subject=f"Důležitá akce v plánu. Zapiš se co nejdřív na akci {info_about.name}"
+            msg=f"Zdavíme Litomíky a naše příznivce\n\nZrovna jsem vytvořili novou událost pro veřejnost {info_about.name}, která se bude konat {time_date}. Akci je pro nás moc důležitá, a tak prosíme zapište se a opravdu doražte. Ideálně vemte rodinu, kamaráda, kamarádku a s dobrou náladou si přijďte užít spoustu zábavy.\n\n Děkujeme za podporu a těšíme se na vás!\nVaši Litomíci  "
+            send_to=inform_all()
+        elif action_id == 3:
+            subject=f"Pozor, máme tady novinku, Tak se rychle zapiš!"
+            msg=f"Zdavíme Litomíky a naše příznivce\n\nAkorát jsem do našeho plánu přidali novinku {info_about.name}. Naplánovali jsme ji na {time_date}. Jelikož se jedná o něco nového doufáme, že zvědavost zvítězí a bude nás co možná nejvíce. Pokud bude mít akce úspěch určitě jí v budoucnu rádi zopakujeme. Tak neváhej a pojď se zapsat. Nový zážitek už čeká!\n\n Přejeme pěkný den  těšíme se na vás!\nVaši Litomíci  "
+            send_to=inform_all()
+        elif action_id ==4 :
+            subject=f"A je to tu zase. Zapiš se na tradiční {info_about.name}"
+            msg=f"Zdavíme Litomíky a naše příznivce\n\n opět tu pro vás máme {info_about.name}. Začátek jsme naplánovali na {time_date}. Akci není třeba představovat neboť se jedná o každoroční záležitost. A pokud jsi nováček, tak jediné co potřebuješ vědět je, že tohle určitě nechceš propásout. \n\n Přeje vám pěkný den a těšíme se na vás!\nVaši Litomíci  "
+            send_to=inform_all()
+        elif action_id == 5:
+            subject=f"Nezapomeň! {info_about.name} ({time_date} od {time_time})"
+            send_to=infrom_asigned(info_about)
+            msg=f"Zdavíme Litomíky a naše příznivce\n\n {info_about.name}, se rychle blíží, a tak nezapomeňte, že {time_date} v {time_time}být připraveni. Místo srazu je {info_about.departure}. S sebou si vzměnte: {info_about.notes}\n\n Těšíme se na vás\nVaši Litomíci"
+        elif action_id== 6 :
+            subject=f"Poslední možnost! {info_about.name} ({time_date} od {time_time})"
+            send_to=infrom_asigned(info_about)
+            msg=f"Zdavíme Litomíky a naše příznivce\n\n stále máme volná místa. {info_about.name}, se rychle blíží, a tak se nezapomeňte zapsat a dorazit. Začínáme {time_date} v {time_time}. Místo srazu je {info_about.departure}. Čím více nás bude tím více zábavy si užijeme, tak nebuď labuť a koukej přijít mezi nás.\n\n Brzo naviděnou a příjemný zbytek dne\nVaši Litomíci"
+        email = EmailMessage(
+            subject=subject,
+            body=msg,
+            from_email="turistaklitomici@gmail.com",  # You can set a default email in your settings.py
+            to=send_to,
+        )
+        # attachment_paths=["extraFiles/bezinfekcnost.pdf"]
+        # # Attach files
+        # for attachment_path in attachment_paths:
+        #     with open(attachment_path, 'rb') as file:
+        #         email.attach_file(attachment_path)
+        email.send(fail_silently=False)
+        messages.success(request,"Upozornění bylo všem úspěšně odesláno.")
+        return redirect(request.META.get('HTTP_REFERER'))
+    if isUserLogged(request):
+        messages.error(request,"K tomuto nemáte oprávnění!")
+        return redirect("account:profile")
+    else:
+        messages.error(request, MSG.timeOut)   
 def addMoney2pay(request,account_id):
     if isUserLoggedWithPermission(request,2):
         a = get_object_or_404(Account, id=account_id)
@@ -361,7 +411,7 @@ def sendMessage(request):
     if isUserLogged(request):
         account = getUsersAccount(request)
         if request.method == 'POST':
-            form = EmailForm(request.POST)
+            form = ContactForm(request.POST)
             if form.is_valid():
                 subject = form.cleaned_data['subject']
                 text = form.cleaned_data['text']
@@ -381,16 +431,16 @@ def sendMessage(request):
                     messages.success(request,MSG.contacUsSuccess)
                 except Exception as e:
                     messages.error(request,MSG.contactUsSendFail)
-                    form = EmailForm()
+                    form = ContactForm()
                     return render(request, 'tags/mains/contacts.html', {'form': form,"done":1,'role':account.position,})
                 return HttpResponseRedirect('sendMsg')
             else:
                 errs=form.errors.items()
                 messages.error(request,MSG.contactUsFailValid(errs))
-                form = EmailForm()
+                form = ContactForm()
                 return render(request, 'tags/mains/contacts.html', {'form': form,"done":2,'role':account.position,})    
         else:
-            form = EmailForm()
+            form = ContactForm()
         return render(request, 'tags/mains/contacts.html', {'form': form,"done":3,'role':account.position,})
     else:
         messages.error(request,MSG.timeOut)
@@ -421,7 +471,9 @@ def showMembers(request):
                     })
         dic={
             "role": account.position,#0=user;1=leader;2=econom;3=admin
-            "members":member2pass
+            "members":member2pass,
+            "events":Event.objects.all().order_by('-meeting'),
+            "day":date.today()
         }
         
         return render(request,"tags/mains/allMembers.html",dic)
@@ -538,8 +590,10 @@ def newMember(request):
                 request.user.account.member.add(newMember)
                 if not membersAtomCheck():
                     account = getUsersAccount(request)
-                    account.wallet+=(-1200)
-                messages.success(request, MSG.createMemberSuccess)
+                    account.wallet+=(-1000)
+                    messages.success(request,MSG.newMemberJoined)
+                else:    
+                    messages.success(request, MSG.createMemberSuccess)
                 return redirect('account:profile')  # Replace 'success_page' with the desired success page name or URL
             else:
                 messages.error(request, MSG.newMemberValidFail(form.errors.items()))
@@ -559,6 +613,7 @@ def signUp(request):#prvni krok registrace
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
+            
             user = form.save()
             # Log in the user
             username = form.cleaned_data['username']
@@ -710,9 +765,6 @@ def signIn(request):
                 messages.success(request,MSG.regStep1Success)
                 return redirect('account:newAccount')  # Change 'next_step_registration' to your actual URL
             return redirect("account:logged")
-        else:
-            messages.error(request,MSG.loginFail)
-            return redirect("account:login")
     return render(request, "index.html")
 def sign_out(request):
     logout(request)
