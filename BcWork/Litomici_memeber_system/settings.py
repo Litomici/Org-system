@@ -9,9 +9,6 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-from inspect import trace
-import json
-from operator import truediv
 import dj_database_url
 from pathlib import Path
 from django.core.mail.backends.console import EmailBackend
@@ -39,7 +36,7 @@ EMAIL_USE_TLS = True  # Use TLS for secure connection
 #EMAIL_USE_SSL = False  # Use SSL for secure connection (if port is set to 465)
 EMAIL_HOST_USER = 'turistaklitomici@gmail.com'
 EMAIL_HOST_PASSWORD = 'cpep iyrd jgfe pzmz'
-DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
+DEFAULT_FROM_EMAIL = 'turistaklitomici@gmail.com'
   # Use the generated app password if you set one
 # DEFAULT_FROM_EMAIL = 'turistaklitomici@gmail.com'
 # SERVER_EMAIL = 'turistaklitomici@gmail.com'
@@ -55,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions'
     
 ]
 
